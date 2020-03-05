@@ -1,6 +1,6 @@
-import { defaultTo, prop } from 'ramda'
+import { propOr } from 'ramda'
 
-const getOr0 = (res,state) => defaultTo(0)(prop(res,state))
+const getOr0 = (res,state) => propOr(0)(res)(state)
 
 export const RESOURCE = 'zack-foss/resource'
 export const LOAD_RESOURCES = 'zack-foss/load-resource'
