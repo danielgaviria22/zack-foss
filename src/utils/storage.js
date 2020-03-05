@@ -1,15 +1,15 @@
-import { compose , isNil , always } from "ramda"
+import { compose , isNil } from "ramda"
 
 const SAVE_KEY = "__zack_foss__"
 
 const toEncodedJSON = compose( window.btoa , JSON.stringify );
 const fromEncodedJSON = compose( JSON.parse , window.atob );
-const emptyBase64 = always(window.btoa("{}"))
+const emptyBase64 = window.btoa("{}")
 
 const local = {
     get(key){
         const data = window.localStorage.getItem(key)
-        return isNil(data) ? emptyBase64() : data
+        return isNil(data) ? emptyBase64 : data
     },
     set(key,value){
         window.localStorage.setItem(key,value)
