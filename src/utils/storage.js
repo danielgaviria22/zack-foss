@@ -1,19 +1,33 @@
-import { compose } from "ramda"
+import { compose , isNil , always } from "ramda"
 
 const SAVE_KEY = "__zack_foss__"
 
 const toEncodedJSON = compose( window.btoa , JSON.stringify );
 const fromEncodedJSON = compose( JSON.parse , window.atob );
+const emptyBase64 = always(window.btoa("{}"))
+
+const local = {
+    get(key){
+        const data = window.localStorage.getItem(key)
+        return isNil(data) ? emptyBase64() : data
+    },
+    set(key,value){
+        window.localStorage.setItem(key,value)
+    },
+    delete(key){
+        window.localStorage.removeItem(key)
+    }
+}
 
 const Storage = {
     save(data){
-        window.localStorage.setItem(SAVE_KEY,toEncodedJSON(data));
+        local.set(SAVE_KEY,toEncodedJSON(data));
     },
     load(){
-        return fromEncodedJSON(window.localStorage.getItem(SAVE_KEY));
+        return fromEncodedJSON(local.get(SAVE_KEY));
     },
     delete(){
-        window.localStorage.removeItem(SAVE_KEY)
+        local.delete(SAVE_KEY)
     }
 }
 

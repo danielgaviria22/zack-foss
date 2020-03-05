@@ -3,6 +3,7 @@ import { defaultTo, prop } from 'ramda'
 const getOr0 = (res,state) => defaultTo(0)(prop(res,state))
 
 export const RESOURCE = 'zack-foss/resource'
+export const LOAD_RESOURCES = 'zack-foss/load-resource'
 
 export default function reducer(prevState={},action){
     const { type, payload } = action;
@@ -13,6 +14,8 @@ export default function reducer(prevState={},action){
                 ...prevState,
                 [resource]: getOr0(resource,prevState) + amount,
             }
+        case LOAD_RESOURCES:
+            return payload;
         default:
             return prevState;
     }
@@ -25,5 +28,12 @@ export const changeResourceAmount = (resType, amount) => {
             resource: resType,
             amount,
         }
+    }
+}
+
+export const loadResources = (payload) => {
+    return {
+        type: LOAD_RESOURCES,
+        payload,
     }
 }

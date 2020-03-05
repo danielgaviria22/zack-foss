@@ -1,11 +1,10 @@
-import { mergeMap, map } from 'rxjs/operators'
+import { mapTo, debounceTime } from 'rxjs/operators'
 import { ofType } from "redux-observable";
 import { RESOURCE } from './'
-import Storage from '../../utils/storage';
+import { triggerSave } from '../save';
 
-export const resourceEpic = ($action,$state) => $action.pipe(
+export const resourceEpic = (action$) => action$.pipe(
     ofType(RESOURCE),
-    mergeMap(() => $state.pipe(
-        map((data) => Storage.save(data)))
-    )
+    debounceTime(500),
+    mapTo(triggerSave())
 )
