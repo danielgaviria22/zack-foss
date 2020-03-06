@@ -25,7 +25,15 @@ const Storage = {
         local.set(SAVE_KEY,toEncodedJSON(data));
     },
     load(){
-        return fromEncodedJSON(local.get(SAVE_KEY));
+        try {
+            return Result.Ok(fromEncodedJSON(local.get(SAVE_KEY)));
+        } catch(e) {
+            return Result.Error({
+                raw: local.get(SAVE_KEY),
+                name: e.name,
+                message: e.message
+            })
+        }
     },
     delete(){
         local.delete(SAVE_KEY)

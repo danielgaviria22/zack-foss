@@ -1,6 +1,6 @@
 import { mergeMap , map } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
-import { propOr , compose } from 'ramda'
+import { propOr , compose, always } from 'ramda'
 import { LOAD, INJECT, loadState, injectionError } from '.'
 import { loadResources } from '../resources'
 import { loadFlags } from '../flags'
@@ -14,7 +14,7 @@ const getFlags = propOrEmptyObject("flags")
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
-    map(Storage.load),
+    map(() => Storage.load().onError(always({}))),
     mergeMap(
         fromActions(
             compose( loadFlags, getFlags ),
