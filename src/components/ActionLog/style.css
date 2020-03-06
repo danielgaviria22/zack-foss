@@ -1,0 +1,21 @@
+.action-log {
+    height: 10ch;
+    overflow-y: scroll;
+    width: auto;
+}
+
+.action-log__container {
+    width: 100%;
+    height: 100%;
+}
+
+.action-log__item {
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.action-log--fluid {
+    width: 100%;
+    height: 100%;
+}

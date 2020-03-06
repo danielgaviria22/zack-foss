@@ -10,7 +10,7 @@ const extractWith = (data) => ifElse(
     apply(__,data), 
     identity
 )
-const extract = extractWith([])
+export const extract = extractWith([])
 
 export const fromActions = (...action) => (...data) => of(...action.map(extractWith(data)))
 export const fromActionsEager = (...actions) => of(...actions.map(extract))
