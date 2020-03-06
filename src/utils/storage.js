@@ -29,7 +29,7 @@ const Storage = {
             return Result.Ok(fromEncodedJSON(local.get(SAVE_KEY)));
         } catch(e) {
             return Result.Error({
-                raw: local.get(SAVE_KEY),
+                data: local.get(SAVE_KEY),
                 name: e.name,
                 message: e.message
             })

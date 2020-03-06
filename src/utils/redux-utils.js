@@ -1,10 +1,15 @@
 import { of } from "rxjs"
+import { __, is, ifElse, apply, identity } from 'ramda'
 
 export const nullaryActionCreator = type => () => ({ type })
 export const unaryActionCreator = type => payload => ({ type, payload })
 export const nAryActionCreator = (type, f) => (...args) => ({ type, payload: f(...args) })
 
-const extractWith = (data) => (f) => typeof(f) === "function" ? f(...data) : f
+const extractWith = (data) => ifElse(
+    is(Function), 
+    apply(__,data), 
+    identity
+)
 const extract = extractWith([])
 
 export const fromActions = (...action) => (...data) => of(...action.map(extractWith(data)))
