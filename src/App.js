@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { changeResourceAmount } from './redux/resources'
+import { useDispatch } from 'react-redux'
 import { loadState } from './redux/load';
-import { pathOr as _pathOr } from 'ramda';
-
-const pathOr = (or,p) => _pathOr(or,p.split("."));
+import { triggerFlag } from './redux/flags';
+import { resetState } from './redux/reset';
+import { changeResourceAmount } from './redux/resources'
+import { useResource, useFlag } from './utils/hooks';
 
 function App() {
-  const wood = useSelector(pathOr(0,"resources.wood"))
+  const wood = useResource("wood");
+  const isSuper = useFlag("super");
   const dispatch = useDispatch()
   const handleClick = () => dispatch(changeResourceAmount("wood",100))
+  const handleFlag = () => dispatch(triggerFlag("super"))
+  const handleReset = () => dispatch(resetState())
   useEffect(() => {
     dispatch(loadState())
   },[dispatch])
@@ -19,6 +22,10 @@ function App() {
       Zack Foss In Production...
       </div>
       <button onClick={handleClick}>Click for wood</button>
+      <button onClick={handleFlag}>Click to be {isSuper ? "normal" : "super"}</button>
+      <div>
+        <button onClick={handleReset}>Reset</button>
+      </div>
       <div>
         wood: {wood}
       </div>

@@ -1,4 +1,5 @@
 import { compose , isNil } from "ramda"
+import Result from "./result";
 
 const SAVE_KEY = "__zack_foss__"
 
@@ -28,6 +29,19 @@ const Storage = {
     },
     delete(){
         local.delete(SAVE_KEY)
+    },
+    inject(raw){
+        try {
+            const data = fromEncodedJSON(raw);
+            this.save(data)
+            return Result.Ok(data);
+        } catch(e) {
+            return Result.Error({
+                data: raw,
+                name: e.name,
+                message: e.message,
+            });
+        }
     }
 }
 

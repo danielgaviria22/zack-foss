@@ -1,6 +1,9 @@
-export const LOAD = "zack-foss/load"
+import { nullaryActionCreator, unaryActionCreator } from "../../utils/redux-utils"
 
-export const loadState = (payload) => ({
-    type: LOAD,
-    payload,
-})
+export const LOAD = "zack-foss/load"
+export const INJECT = "zack-foss/inject"
+export const INJECT_ERROR = "zack-foss/inject-error"
+
+export const loadState = nullaryActionCreator(LOAD)
+export const injectState = unaryActionCreator(INJECT)
+export const injectionError = unaryActionCreator(INJECT_ERROR)

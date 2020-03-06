@@ -1,18 +1,32 @@
-import { of } from 'rxjs'
 import { mergeMap , map } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
-import { propOr } from 'ramda'
-import { LOAD } from '.'
+import { propOr , compose } from 'ramda'
+import { LOAD, INJECT, loadState, injectionError } from '.'
 import { loadResources } from '../resources'
+import { loadFlags } from '../flags'
+import { triggerSave } from '../save'
+import { fromActions } from '../../utils/redux-utils'
 import Storage from '../../utils/storage'
 
 const propOrEmptyObject = propOr({})
-const resources = propOrEmptyObject("resources")
+const getResources = propOrEmptyObject("resources")
+const getFlags = propOrEmptyObject("flags")
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
     map(Storage.load),
-    mergeMap((state) => of(
-        loadResources(resources(state))
-    ))
+    mergeMap(
+        fromActions(
+            compose( loadFlags, getFlags ),
+            compose( loadResources, getResources )
+        )
+    )
+)
+
+export const injectEpic = action$ => action$.pipe(
+    ofType(INJECT),
+    mergeMap(act => Storage.inject(act.payload)
+        .map(fromActions(loadState,triggerSave))
+        .onError(fromActions(injectionError))
+    )
 )
