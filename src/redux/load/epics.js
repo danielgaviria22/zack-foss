@@ -4,7 +4,7 @@ import { propOr , compose, always } from 'ramda'
 import { LOAD, INJECT, loadState, injectionError } from '.'
 import { loadResources } from '../resources'
 import { loadFlags } from '../flags'
-import { triggerSave } from '../save'
+import { communicateSaved } from '../save'
 import { fromActions } from '../../utils/redux-utils'
 import Storage from '../../utils/storage'
 
@@ -26,7 +26,7 @@ export const loadEpic = action$ => action$.pipe(
 export const injectEpic = action$ => action$.pipe(
     ofType(INJECT),
     mergeMap(act => Storage.inject(act.payload)
-        .map(fromActions(loadState,triggerSave))
+        .map(fromActions(loadState,communicateSaved))
         .onError(fromActions(injectionError))
     )
 )

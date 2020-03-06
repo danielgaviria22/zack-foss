@@ -12,7 +12,6 @@ const ActionItem = ({ data, children }) => {
 const scrollToBottom = (ref) => {
     Maybe.fromFalsy(ref.current)
         .effect(curr => curr.scrollTo(0, curr.scrollHeight))
-        .onNone(() => console.log("Ref in null"))
 }
 
 const ActionLog = (props) => {
@@ -25,10 +24,12 @@ const ActionLog = (props) => {
         }
     },[disableScroll,lines])
 
-    return <div ref={scrollRef} className={getClassName({
+    const baseClass = getClassName({
         "action-log": true,
         "action-log--fluid": fluid
-    })}>
+    })
+
+    return <div ref={scrollRef} className={baseClass}>
         <section className="action-log__container">
             { lines.length ? lines.map((x,i) => <ActionItem data={x} key={i}/>) : children }
         </section>
