@@ -1,3 +1,5 @@
+import { equals } from "ramda"
+
 const _Error = (value) => {
     return {
         map: (f) => _Error(value),
@@ -5,6 +7,7 @@ const _Error = (value) => {
         isOk: () => false,
         isError: () => true,
         onError: (f) => f(value),
+        equals: (v) => v && v.get && equals(v.get(),value),
     }
 }
 
@@ -15,6 +18,7 @@ const Ok = (value) => {
         isOk: () => true,
         isError: () => false,
         onError: (f) => value,
+        equals: (v) => v && v.get && equals(v.get(),value),
     }
 }
 

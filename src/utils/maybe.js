@@ -1,14 +1,18 @@
-const None = () => {
+import { equals } from "ramda"
+
+const None = (() => {
     return {
-        map: (f) => None(),
+        map: (f) => None,
         flatMap: (f) => f(),
         get: () => undefined,
         isJust: () => false,
         isNone: () => true,
         onNone: (f) => f(),
-        effect: (f) => None(),
+        equals: (v) => v && v.isNone && v.isNone(),
+        empty: () => None,
+        effect: (f) => None,
     }
-}
+})()
 
 const Just = (value) => {
     return {
@@ -18,6 +22,8 @@ const Just = (value) => {
         isJust: () => true,
         isNone: () => false,
         onNone: (f) => value,
+        equals: (v) => v && v.isJust && v.isJust() && equals(value,v.get()),
+        empty: () => None,
         effect: (f) => {
             f(value)
             return Just(value)
@@ -26,10 +32,11 @@ const Just = (value) => {
 }
 
 const Maybe = {
-    None,
-    Just
+    None: () => None,
+    Just,
+    empty: () => None,
 }
 
-Maybe.fromFalsy = (data) => data ? Just(data) : None();
+Maybe.fromFalsy = (data) => data ? Just(data) : None;
 
 export default Maybe
