@@ -1,5 +1,5 @@
 import { toPairs, filter, propOr, join, pipe, map, head, compose } from "ramda"
-import { extract } from './functions'
+import { extract } from 'core/utils/functions'
 
 const validate = compose( extract , propOr(false,1))
 

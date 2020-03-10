@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux'
-import { loadState } from './redux/load';
-import { triggerFlag } from './redux/flags';
-import { resetState } from './redux/reset';
-import { changeResourceAmount } from './redux/resources'
-import { useResource, useFlag } from './utils/hooks';
-import ActionLog from './components/ActionLog';
+import { loadState } from 'redux/load';
+import { triggerFlag } from 'redux/flags';
+import { resetState } from 'redux/reset';
+import { changeResourceAmount } from 'redux/resources'
+import { useResource, useFlag } from 'core/hooks/state';
+import ActionLog from 'components/ActionLog';
 
 const fun = (n) => {
   const msgs = {

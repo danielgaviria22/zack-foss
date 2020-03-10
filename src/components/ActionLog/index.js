@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
-import { getClassName } from '../../utils/css-class'
-import Maybe from '../../utils/maybe'
+import { getClassName } from 'core/utils/css-class'
+import { Maybe } from 'core/structures'
 import "./style.css"
 
 const ActionItem = ({ data, children }) => {

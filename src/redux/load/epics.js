@@ -2,11 +2,11 @@ import { mergeMap , map } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 import { propOr , compose, always } from 'ramda'
 import { LOAD, INJECT, loadState, injectionError } from '.'
-import { loadResources } from '../resources'
-import { loadFlags } from '../flags'
-import { communicateSaved } from '../save'
-import { fromActions } from '../../utils/redux-utils'
-import Storage from '../../utils/storage'
+import { loadResources } from 'redux/resources'
+import { loadFlags } from 'redux/flags'
+import { communicateSaved } from 'redux/save'
+import { fromActions } from 'core/utils/redux-utils'
+import Storage from 'core/middleware/storage'
 
 const propOrEmptyObject = propOr({})
 const getResources = propOrEmptyObject("resources")

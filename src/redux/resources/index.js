@@ -1,5 +1,5 @@
 import { propOr } from 'ramda'
-import { unaryActionCreator, nullaryActionCreator } from '../../utils/redux-utils';
+import { unaryActionCreator, nullaryActionCreator } from 'core/utils/redux-utils';
 
 const getOr0 = (res,state) => propOr(0)(res)(state)
 
