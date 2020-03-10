@@ -1,5 +1,5 @@
 import { propOr } from "ramda";
-import { unaryActionCreator, nullaryActionCreator } from '../../utils/redux-utils'
+import { unaryActionCreator, nullaryActionCreator } from 'core/utils/redux-utils'
 
 export const TRIGGER_FLAG = "zack-foss/trigger-flag"
 export const LOAD_FLAGS = "zack-foss/load-flags"

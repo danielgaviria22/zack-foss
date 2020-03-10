@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { prop } from 'ramda';
-import { dotPathOr } from "./functions";
+import { dotPathOr } from "core/utils/functions";
 
 export const useAllFlags = () => useSelector(prop("flags"))
 export const useAllResources = () => useSelector(prop("resources"))

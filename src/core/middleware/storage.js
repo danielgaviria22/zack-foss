@@ -1,5 +1,5 @@
 import { compose , isNil } from "ramda"
-import Result from "./result";
+import { Result } from "core/structures";
 
 const SAVE_KEY = "__zack_foss__"
 

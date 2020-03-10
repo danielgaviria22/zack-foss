@@ -1,7 +1,7 @@
 import { map, withLatestFrom, debounceTime } from 'rxjs/operators'
 import { ofType } from "redux-observable";
 import { SAVE, communicateSaved } from '.';
-import Storage from '../../utils/storage';
+import Storage from 'core/middleware/storage';
 
 export const saveEpic = (action$, state$) => action$.pipe(
     ofType(SAVE),

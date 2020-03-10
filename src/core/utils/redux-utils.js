@@ -1,5 +1,5 @@
 import { of } from "rxjs"
-import { extractWith, extract } from "./functions"
+import { extractWith, extract } from "core/utils/functions"
 
 export const nullaryActionCreator = type => () => ({ type })
 export const unaryActionCreator = type => payload => ({ type, payload })

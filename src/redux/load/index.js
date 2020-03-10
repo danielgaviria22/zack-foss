@@ -1,4 +1,4 @@
-import { nullaryActionCreator, unaryActionCreator } from "../../utils/redux-utils"
+import { nullaryActionCreator, unaryActionCreator } from "core/utils/redux-utils"
 
 export const LOAD = "zack-foss/load"
 export const INJECT = "zack-foss/inject"

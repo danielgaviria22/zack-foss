@@ -1,4 +1,4 @@
-import { nullaryActionCreator } from "../../utils/redux-utils";
+import { nullaryActionCreator } from "core/utils/redux-utils";
 
 export const RESET = "zack-foss/reset";
 
