@@ -4,8 +4,9 @@ import { loadState } from 'redux/load';
 import { triggerFlag } from 'redux/flags';
 import { resetState } from 'redux/reset';
 import { changeResourceAmount } from 'redux/resources'
-import { useResource, useFlag } from 'core/hooks/state';
+import { useResource, useFlag, useStatusEffect, useCharacterStat } from 'core/hooks/state';
 import ActionLog from 'components/ActionLog';
+import { changeStat, triggerEffect } from 'redux/status';
 
 const fun = (n) => {
   const msgs = {
@@ -32,10 +33,14 @@ const testLines = [
 function App() {
   const wood = useResource("wood");
   const isSuper = useFlag("super");
+  const isSick = useStatusEffect("sick");
+  const strength = useCharacterStat("str");
   const dispatch = useDispatch()
   const handleClick = () => dispatch(changeResourceAmount("wood",100))
   const handleFlag = () => dispatch(triggerFlag("super"))
   const handleReset = () => dispatch(resetState())
+  const handleSick = () => dispatch(triggerEffect("sick"))
+  const handleStrength = (amount) => () => dispatch(changeStat("str",amount))
   useEffect(() => {
     dispatch(loadState())
   },[dispatch])
@@ -51,6 +56,14 @@ function App() {
       </div>
       <button onClick={handleClick}>Click for wood</button>
       <button onClick={handleFlag}>Click to be {isSuper ? "normal" : "super"}</button>
+      <button onClick={handleSick}>Click to be {isSick ? "healthy" : "sick"}</button>
+      <div>
+        <div>Strength: {strength}</div>
+        <div>
+          <button onClick={handleStrength(-1)}>-</button>
+          <button onClick={handleStrength(+1)}>+</button>
+        </div>
+      </div>
       <div>
         <button onClick={handleReset}>Reset</button>
       </div>

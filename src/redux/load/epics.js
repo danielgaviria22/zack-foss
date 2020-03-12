@@ -1,16 +1,20 @@
 import { mergeMap , map } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
-import { propOr , compose, always } from 'ramda'
+import { compose, always, __ } from 'ramda'
 import { LOAD, INJECT, loadState, injectionError } from '.'
 import { loadResources } from 'redux/resources'
 import { loadFlags } from 'redux/flags'
+import { loadEffects, loadStats } from 'redux/status'
 import { communicateSaved } from 'redux/save'
 import { fromActions } from 'core/utils/redux-utils'
 import Storage from 'core/middleware/storage'
+import { dotPathOr } from 'core/utils/functions'
 
-const propOrEmptyObject = propOr({})
-const getResources = propOrEmptyObject("resources")
-const getFlags = propOrEmptyObject("flags")
+const pathOrEmptyObject = dotPathOr({})
+const getResources = pathOrEmptyObject("resources",__)
+const getFlags = pathOrEmptyObject("flags",__)
+const getStats = pathOrEmptyObject("character.stats",__)
+const getEffects = pathOrEmptyObject("character.effects",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
@@ -18,7 +22,9 @@ export const loadEpic = action$ => action$.pipe(
     mergeMap(
         fromActions(
             compose( loadFlags, getFlags ),
-            compose( loadResources, getResources )
+            compose( loadResources, getResources ),
+            compose( loadStats, getStats ),
+            compose( loadEffects, getEffects )
         )
     )
 )
