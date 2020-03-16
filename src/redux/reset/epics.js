@@ -4,6 +4,7 @@ import { RESET } from ".";
 import { resetResources } from "redux/resources";
 import { resetFlags } from "redux/flags";
 import { triggerSave } from "redux/save";
+import { resetEffects, resetStats } from "redux/status";
 import { fromActions } from "core/utils/redux-utils";
 
 export const resetEpic = action$ => action$.pipe(
@@ -11,6 +12,8 @@ export const resetEpic = action$ => action$.pipe(
     mergeMap(fromActions(
         resetResources,
         resetFlags,
+        resetStats,
+        resetEffects,
         triggerSave
     ))
 )
