@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { getClassName } from 'core/utils/css-class'
 import { Maybe } from 'core/structures'
-import "./style.css"
+import "./style.scss"
 
 const ActionItem = ({ data, children }) => {
     return <article className="action-log__line">
