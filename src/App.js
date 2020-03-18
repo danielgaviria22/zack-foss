@@ -55,7 +55,7 @@ function App() {
       <div>
       Zack Foss In Production...
       </div>
-      <Button disabled loadingTime="50" onClick={handleClick}>Click for wood</Button>
+      <Button loadingTime={2} onClick={handleClick}>Click for wood</Button>
       <button onClick={handleFlag}>Click to be {isSuper ? "normal" : "super"}</button>
       <button onClick={handleSick}>Click to be {isSick ? "healthy" : "sick"}</button>
       <div>
