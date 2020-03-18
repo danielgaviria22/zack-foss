@@ -6,6 +6,7 @@ import { resetState } from 'redux/reset';
 import { changeResourceAmount } from 'redux/resources'
 import { useResource, useFlag, useStatusEffect, useCharacterStat } from 'core/hooks/state';
 import ActionLog from 'components/ActionLog';
+import Button from 'components/Button';
 import { changeStat, triggerEffect } from 'redux/status';
 
 const fun = (n) => {
@@ -54,7 +55,7 @@ function App() {
       <div>
       Zack Foss In Production...
       </div>
-      <button onClick={handleClick}>Click for wood</button>
+      <Button disabled loadingTime="50" onClick={handleClick}>Click for wood</Button>
       <button onClick={handleFlag}>Click to be {isSuper ? "normal" : "super"}</button>
       <button onClick={handleSick}>Click to be {isSick ? "healthy" : "sick"}</button>
       <div>

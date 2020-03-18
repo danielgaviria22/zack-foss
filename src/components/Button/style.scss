@@ -1,0 +1,29 @@
+.button{
+    font-family: 'Roboto', sans-serif;
+    background-color: skyblue;
+    color: black;
+    height: 60px;
+    min-width: 150px;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    overflow: hidden;
+    position: relative;
+    & .loading-block {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        background-color: gray;
+        height: 60px;
+        width: 100%;
+    }
+    &--disabled{
+        opacity: 0.5;
+    }
+    &--loading {
+        & .loading-block {
+            opacity: 0.5;
+        }
+    }
+}
