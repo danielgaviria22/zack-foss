@@ -1,20 +1,52 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { getClassName } from 'core/utils/css-class'
+import { identity } from 'ramda';
 import "./style.scss"
 
 const Button = (props) => {
-    const {children, onClick, disabled, loadingTime} = props;
+    const { 
+        children, 
+        disabled, 
+        loadingTime=5,
+        onClick=identity, 
+        onAnimationEnd=identity,
+    } = props;
+
+    const [ loading, setLoading ] = useState(false);
 
     const baseClass = getClassName({
         "button": true,
-        "button--disabled": disabled,
-        "button--loading": loadingTime > 0
+        "button--loading": loading,
+        "button--disabled": disabled || loading
     })
 
+    const loadingBlockClass = getClassName({
+        "loading-block": true,
+        "loading-block--loading": loading,
+    })
+
+    const handleClick = () => {
+        !disabled && setLoading(true)
+        onClick()
+    }
+
+    const handleAnimationEnd = () => {
+        setLoading(false);
+        onAnimationEnd()
+    }
+
     return (
-        <button onClick={onClick} className={baseClass} disabled={disabled || loadingTime > 0}>
+        <button 
+            onClick={handleClick} 
+            className={baseClass} 
+            disabled={disabled || loading}
+        >
             {children}
-            <div className="loading-block" style={{width: `${loadingTime}%`}}></div>
+            <div 
+                className={loadingBlockClass} 
+                style={{ animationDuration: `${loadingTime}s`}}
+                onAnimationEnd={handleAnimationEnd}
+            />
         </button>
     )
 }
