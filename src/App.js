@@ -4,11 +4,13 @@ import { loadState } from 'redux/load';
 import { triggerFlag } from 'redux/flags';
 import { resetState } from 'redux/reset';
 import { changeResourceAmount } from 'redux/resources'
-import { useResource, useFlag, useStatusEffect, useCharacterStat } from 'core/hooks/state';
+import { useResource, useFlag, useStatusEffect, useCharacterStat, useInventory } from 'core/hooks/state';
 import ActionLog from 'components/ActionLog';
 import Button from 'components/Button';
 import StatusBar, { Oxygen, Water } from 'components/StatusBar';
 import { changeStat, triggerEffect } from 'redux/status';
+import { compose, path } from 'ramda';
+import { Maybe } from 'core/structures';
 
 const fun = (n) => {
   const msgs = {
@@ -37,19 +39,33 @@ function App() {
   const isSuper = useFlag("super");
   const isSick = useStatusEffect("sick");
   const strength = useCharacterStat("str");
+  const inventory = useInventory();
   const dispatch = useDispatch()
+
   const handleClick = () => dispatch(changeResourceAmount("wood",100))
   const handleFlag = () => dispatch(triggerFlag("super"))
   const handleReset = () => dispatch(resetState())
   const handleSick = () => dispatch(triggerEffect("sick"))
   const handleStrength = (amount) => () => dispatch(changeStat("str",amount))
+
   useEffect(() => {
     dispatch(loadState())
   },[dispatch])
 
   const [ lines , setLines ] = useState(testLines)
-
   const handleAddLine = () => setLines([ ...lines, fun(lines.length - testLines.length)]);
+
+  const [ itemName, setItemName ] = useState("");
+  const handleItemNameChange = compose( setItemName , path(["target","value"]))
+
+  const handleItemSubmit = () => {
+    Maybe
+      .fromFalsy(itemName.trim())
+      .effect(id => inventory.changeAmount(id,1))
+      .onNone(() => alert("Supply a non empty name"))
+  }
+
+  const handleItemChange = (id,amount) => () => inventory.changeAmount(id,amount)
 
   return (
     <div>
@@ -88,6 +104,27 @@ function App() {
         lines={lines}
       />
       <button onClick={handleAddLine}>Add line</button>
+      <div>
+        <h2>Inventory</h2>
+        <input onChange={handleItemNameChange}/>
+        <button onClick={handleItemSubmit}>Add Item</button>
+        <div>
+          <ul>
+            {inventory
+              .getAvailableItems()
+              .map(({ id , amount}) => {
+                return <li key={id}>
+                  {id} : {amount}
+                  <div>
+                    <button onClick={handleItemChange(id,-1)}>-</button>
+                    <button onClick={handleItemChange(id,+1)}>+</button>
+                  </div>
+                </li>
+              })
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

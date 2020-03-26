@@ -1,6 +1,8 @@
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { prop } from 'ramda';
 import { dotPathOr } from "core/utils/functions";
+import { Inventory } from "core/structures";
+import { changeInventory } from "redux/status";
 
 export const useAllFlags = () => useSelector(prop("flags"))
 export const useAllResources = () => useSelector(prop("resources"))
@@ -63,4 +65,17 @@ export const useCharacterStat = (stat) => {
  */
 export const useCharacterStats = () => {
     return useSelector(dotPathOr({},`character.stats`))
+}
+
+/**
+ * Gets character inventory
+ * @typedef {{ id: string, amount?: number }} Item
+ * @returns {import("../../structures/inventory").Inventory<Item>}
+ */
+export const useInventory = () => {
+    const dispatch = useDispatch();
+    return Inventory.fromArray(
+        useSelector(dotPathOr([],"character.inventory")),
+        (id,amount) => dispatch(changeInventory(id,amount))
+    );
 }

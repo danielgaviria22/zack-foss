@@ -6,6 +6,16 @@ import { rootReducer } from './reducer'
 
 const epicMiddleware = createEpicMiddleware()
 
+const initialState = {
+    resources: {},
+    flags: {},
+    character: {
+        effects: {},
+        stats: {},
+        inventory: []
+    }
+}
+
 const initStore = () => {
     const composeEnhancers = 
         process.env.NODE_ENV === "development" ? 
@@ -18,6 +28,7 @@ const initStore = () => {
     
     const store = createStore(
         rootReducer,
+        initialState,
         composeEnhancers(
             applyMiddleware(...enhancers)
         )
