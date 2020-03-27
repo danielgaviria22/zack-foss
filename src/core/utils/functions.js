@@ -1,9 +1,9 @@
-import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find } from 'ramda'
+import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, isNil } from 'ramda'
+import { compose } from 'redux';
 
 /**
  * @description if the value given is a function, applies it with "data" as arguments and returns the result. Otherwise, it is equal to R.identity
  * @param {any} data arguments for apply
- * @param {any} value value to be extracted
  */
 export const extractWith = (data) => (value) => ifElse(
     is(Function), 
@@ -50,3 +50,21 @@ export const propNeq = curryN(3, (att,value,obj) => complement(propEq)(att,value
  * @param {Array} data array to be looked up
  */
 export const findOr = curryN(3, (or,pred,data) => find(pred,data) || or )
+
+export const defineAndTransformProp = curryN(4,(zero,name,transform,obj) => {
+    return compose(
+        evolve({ [name]: transform }),
+        when(
+            propSatisfies(isNil, name),
+            assoc(name,zero)
+        )
+    )(obj)
+})
+
+export const addToNumericProp = useWith(
+    defineAndTransformProp, 
+    [identity, identity, add, identity]
+)(0)
+
+export const transformBooleanProp = defineAndTransformProp(false);
+export const triggerBooleanProp = defineAndTransformProp(false,__,not);

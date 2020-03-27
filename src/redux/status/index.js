@@ -1,7 +1,8 @@
-import { propOr, propEq, equals, ifElse, always, filter, compose, propSatisfies } from "ramda";
+// @ts-nocheck
 import { combineReducers } from "redux";
+import { propEq, equals, ifElse, always, filter, compose, propSatisfies, findIndex, adjust, evolve, add, append, none } from "ramda";
 import { nAryActionCreator, createReducer, resetState, nullaryActionCreator, unaryActionCreator, loadState } from "core/utils/redux-utils";
-import { propNeq, findOr } from "core/utils/functions";
+import { triggerBooleanProp, addToNumericProp } from "core/utils/functions";
 
 export const TRIGGER_STATUS_EFFECT = 'zack-foss/trigger-effects'
 export const RESET_STATUS_EFFECTS = 'zack-foss/reset-effects'
@@ -18,10 +19,7 @@ export const EMPTY_INVENTORY = 'zack-foss/empty-inventory'
 const statusEffectReducer = createReducer({
     [TRIGGER_STATUS_EFFECT]: (state,action) => {
         const { payload } = action
-        return {
-            ...state,
-            [payload]: !propOr(false,payload,state)
-        }
+        return triggerBooleanProp(payload,state)
     },
     [LOAD_STATUS_EFFECTS]: loadState,
     [RESET_STATUS_EFFECTS]: resetState,
@@ -30,10 +28,7 @@ const statusEffectReducer = createReducer({
 const statusStatsReducer = createReducer({
     [CHANGE_STATUS_STATS]: (state,action) => {
         const { payload: { stat, amount } } = action
-        return {
-            ...state,
-            [stat]: propOr(0,stat,state) + amount
-        }
+        return addToNumericProp(stat,amount,state)
     },
     [LOAD_STATUS_STATS]: loadState,
     [RESET_STATUS_STATS]: resetState,
@@ -41,9 +36,6 @@ const statusStatsReducer = createReducer({
 
 const statusInventoryReducer = createReducer({
     [CHANGE_INVENTORY]: (state=[],action) => {
-        if( equals({},state) ) {
-            state = []
-        }
         const { payload: { id, amount } } = action
         return ifElse(
             equals(0),
@@ -51,13 +43,13 @@ const statusInventoryReducer = createReducer({
             (amount) => {
                 return compose(
                     filter(propSatisfies(x => x > 0,"amount")),
-                    (item) => [
-                        ...filter(propNeq("id",item.id),state),
-                        { id, amount: item.amount + amount }
-                    ],
-                    findOr(
-                        { id, amount: 0 },
-                        propEq("id",id)
+                    ifElse(
+                        none(propEq("id",id)),
+                        append({ id, amount }),
+                        adjust(
+                            findIndex(propEq("id",id),state),
+                            evolve({ amount: add(amount) })
+                        ),
                     )
                 )(state)
             }
