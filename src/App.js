@@ -7,6 +7,7 @@ import { changeResourceAmount } from 'redux/resources'
 import { useResource, useFlag, useStatusEffect, useCharacterStat } from 'core/hooks/state';
 import ActionLog from 'components/ActionLog';
 import Button from 'components/Button';
+import StatusBar from 'components/StatusBar';
 import { changeStat, triggerEffect } from 'redux/status';
 
 const fun = (n) => {
@@ -64,6 +65,14 @@ function App() {
           <button onClick={handleStrength(-1)}>-</button>
           <button onClick={handleStrength(+1)}>+</button>
         </div>
+      </div>
+      <div>
+        <StatusBar maxLevel={200} statusLevel={150} statusName="Oxygen"/>
+        <StatusBar maxLevel={200} statusLevel={75} statusName="Oxygen"/>
+        <StatusBar maxLevel={200} statusLevel={20} statusName="Oxygen"/>
+        <StatusBar maxLevel={200} statusLevel={150} statusName="Water"/>
+        <StatusBar maxLevel={200} statusLevel={75} statusName="Water"/>
+        <StatusBar maxLevel={200} statusLevel={20} statusName="Water"/>
       </div>
       <div>
         <button onClick={handleReset}>Reset</button>
