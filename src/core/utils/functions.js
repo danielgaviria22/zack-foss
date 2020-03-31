@@ -27,3 +27,10 @@ export const extract = (value) => extractWith([])(value)
  * dotPathOr(0,"a.b.c",{ a: { b: { } } }) // returns 0
  */
 export const dotPathOr = curryN(3,(or,path,obj) => pathOr(or,path.split("."),obj));
+
+/**
+ * @description maps an object's keys returning a new object with the mapped keys
+ * @param {(key: string) => string | number | symbol } fn iteratee
+ * @param {any} data object
+ */
+export const mapKeys = (fn,data) => Object.keys(data).reduce((acc,key) => ({...acc, [fn(key)]: data[key] }),{})

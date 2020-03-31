@@ -1,0 +1,46 @@
+.barContainer {
+    display: flex;
+    color: white;
+    height: 50px;
+    align-items: center;
+    background-color: black;
+    font-family: 'roboto';
+    padding: 10px;
+
+    & .statusName {
+        min-width: 75px;
+        margin-right: 5px;
+    }
+}
+
+.bar {
+    margin: 0;
+    width: 220px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 30px;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 0 10px;
+    & > div {
+        height: 25px;
+    }
+
+    &.bar--high-level {
+        & > div {
+            background-color: var(--high-level,green);
+        }
+    }
+
+    &.bar--half-level {
+        & > div {
+            background-color: var(--half-level,yellow);
+        }
+    }
+
+    &.bar--low-level {
+        & > div {
+            background-color: var(--low-level,red);
+        }
+    }
+}
