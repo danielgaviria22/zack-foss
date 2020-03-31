@@ -16,7 +16,7 @@ const defaultColors = {
 
 const getLevelColors = (colors) => mapKeys( key => `--${key}-level`, merge(defaultColors, colors))
 
-const StatusBar = ({...props}) => {
+const StatusBar = (props) => {
     const { 
         maxLevel = 100, 
         colors = defaultColors,
