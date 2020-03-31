@@ -7,7 +7,7 @@ import { changeResourceAmount } from 'redux/resources'
 import { useResource, useFlag, useStatusEffect, useCharacterStat } from 'core/hooks/state';
 import ActionLog from 'components/ActionLog';
 import Button from 'components/Button';
-import StatusBar from 'components/StatusBar';
+import StatusBar, { Oxygen, Water } from 'components/StatusBar';
 import { changeStat, triggerEffect } from 'redux/status';
 
 const fun = (n) => {
@@ -67,10 +67,14 @@ function App() {
         </div>
       </div>
       <div>
-        <StatusBar maxLevel={200} statusLevel={150} statusName="Oxygen"/>
+        <StatusBar statusName="Default"/>
+        <StatusBar statusLevel={50} statusName="Default"/>
+        <StatusBar statusLevel={10} statusName="Default"/>
+        <StatusBar statusLevel={10} statusName="Partial" colors={{ low: "white" }}/>
+        <StatusBar maxLevel={200} statusLevel={150} statusName="Oxygen" colors={Oxygen}/>
         <StatusBar maxLevel={200} statusLevel={75} statusName="Oxygen"/>
         <StatusBar maxLevel={200} statusLevel={20} statusName="Oxygen"/>
-        <StatusBar maxLevel={200} statusLevel={150} statusName="Water"/>
+        <StatusBar maxLevel={200} statusLevel={150} statusName="Water" colors={Water}/>
         <StatusBar maxLevel={200} statusLevel={75} statusName="Water"/>
         <StatusBar maxLevel={200} statusLevel={20} statusName="Water"/>
       </div>

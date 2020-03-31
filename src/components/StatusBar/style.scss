@@ -23,31 +23,24 @@
     box-sizing: border-box;
     margin: 0 10px;
     & > div {
-
         height: 25px;
     }
 
-    &.Oxygen{
+    &.bar--high-level {
         & > div {
-            background-color: #A1E9FF;
-        } 
-    }
-
-    &.Water{
-        & > div {
-            background-color: #1A67EE;
-        } 
-    }
-
-    &.bar--halfLevel {
-        & > div {
-            background-color: yellow;
+            background-color: var(--high-level,green);
         }
     }
 
-    &.bar--lowLevel {
+    &.bar--half-level {
         & > div {
-            background-color: red;
+            background-color: var(--half-level,yellow);
+        }
+    }
+
+    &.bar--low-level {
+        & > div {
+            background-color: var(--low-level,red);
         }
     }
 }
