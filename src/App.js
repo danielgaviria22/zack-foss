@@ -58,7 +58,9 @@ function App() {
   const [ itemName, setItemName ] = useState("");
   const handleItemNameChange = compose( setItemName , path(["target","value"]))
 
-  const handleItemSubmit = () => {
+  const handleItemSubmit = (e) => {
+    e.preventDefault()
+    setItemName("");
     Maybe
       .fromFalsy(itemName.trim())
       .effect(id => inventory.changeAmount(id,1))
@@ -105,9 +107,11 @@ function App() {
       />
       <button onClick={handleAddLine}>Add line</button>
       <div>
-        <h2>Inventory</h2>
-        <input onChange={handleItemNameChange}/>
-        <button onClick={handleItemSubmit}>Add Item</button>
+        <form onSubmit={handleItemSubmit}>
+          <h2>Inventory</h2>
+          <input value={itemName} onChange={handleItemNameChange}/>
+          <button>Add Item</button>
+        </form>
         <div>
           <ul>
             {inventory
