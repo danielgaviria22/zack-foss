@@ -1,9 +1,9 @@
-import { __, is, ifElse, apply, identity, pathOr, curryN } from 'ramda'
+import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, isNil } from 'ramda'
+import { compose } from 'redux';
 
 /**
  * @description if the value given is a function, applies it with "data" as arguments and returns the result. Otherwise, it is equal to R.identity
  * @param {any} data arguments for apply
- * @param {any} value value to be extracted
  */
 export const extractWith = (data) => (value) => ifElse(
     is(Function), 
@@ -34,3 +34,37 @@ export const dotPathOr = curryN(3,(or,path,obj) => pathOr(or,path.split("."),obj
  * @param {any} data object
  */
 export const mapKeys = (fn,data) => Object.keys(data).reduce((acc,key) => ({...acc, [fn(key)]: data[key] }),{})
+
+/**
+ * @description Complement of propEq. Equivalent to compose( complement(equals), prop )
+ * @param {string | number | symbol} name key of the attribute
+ * @param {any} value fallback value in case prop is undefined
+ * @param {any} obj object where the attribute will be looked up
+ */
+export const propNeq = curryN(3, (att,value,obj) => complement(propEq)(att,value,obj))
+
+/**
+ * @description Finds the first element that meet the given predicate. Otherwise returns the fallback value
+ * @param {any} or fallback value
+ * @param {() => boolean} pred predicate used to find element
+ * @param {Array} data array to be looked up
+ */
+export const findOr = curryN(3, (or,pred,data) => find(pred,data) || or )
+
+export const defineAndTransformProp = curryN(4,(zero,name,transform,obj) => {
+    return compose(
+        evolve({ [name]: transform }),
+        when(
+            propSatisfies(isNil, name),
+            assoc(name,zero)
+        )
+    )(obj)
+})
+
+export const addToNumericProp = useWith(
+    defineAndTransformProp, 
+    [identity, identity, add, identity]
+)(0)
+
+export const transformBooleanProp = defineAndTransformProp(false);
+export const triggerBooleanProp = defineAndTransformProp(false,__,not);
