@@ -1,4 +1,4 @@
-import Maybe from "./maybe"
+import { Maybe } from '@juan-utils/ramda-structures'
 import { F as False, always, prop, sortBy, identity as I, binary } from "ramda"
 import { propNeq } from "core/utils/functions"
 
@@ -7,7 +7,7 @@ const identity = binary(I);
 /**
  * @template T
  * @typedef Inventory
- * @property {(id: string) => import("./maybe").Maybe<T>} get
+ * @property {(id: string) => Maybe<T>} get
  * @property {(id: string) => T} getItem
  * @property {(id: string) => boolean} hasItem
  * @property {(id: string, pred: (item: T) => boolean) => boolean} itemSatisfies

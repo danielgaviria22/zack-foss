@@ -35,7 +35,7 @@ const StatusBar = (props) => {
         <div className="barContainer">
             <span className="statusName">{statusName}</span>
             <div className={barClass} style={getLevelColors(colors)}>
-                <div style={{width: `${statusPercentage(statusLevel, maxLevel)}%`}}></div>
+                <div className="inner-bar" style={{width: `${statusPercentage(statusLevel, maxLevel)}%`}}></div>
             </div>
             <span>{statusLevel}/{maxLevel}</span>
         </div>

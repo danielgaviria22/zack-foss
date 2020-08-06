@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react'
+import { Maybe } from '@juan-utils/ramda-structures'
 import { getClassName } from 'core/utils/css-class'
-import { Maybe } from 'core/structures'
 import "./style.scss"
 
-const ActionItem = ({ data, children }) => {
+const ActionItem = ({ data, children=[] }) => {
     return <article className="action-log__line">
         {data || children}
     </article> 

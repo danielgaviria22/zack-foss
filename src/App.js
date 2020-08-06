@@ -9,8 +9,8 @@ import ActionLog from 'components/ActionLog';
 import Button from 'components/Button';
 import StatusBar, { Oxygen, Water } from 'components/StatusBar';
 import { changeStat, triggerEffect } from 'redux/status';
-import { compose, path } from 'ramda';
-import { Maybe } from 'core/structures';
+import { compose, path, prop } from 'ramda';
+import { Maybe } from '@juan-utils/ramda-structures';
 
 const fun = (n) => {
   const msgs = {
@@ -68,6 +68,13 @@ function App() {
   }
 
   const handleItemChange = (id,amount) => () => inventory.changeAmount(id,amount)
+  const water = inventory.getItem("water").amount;
+  const cycle = (quant=-10) => () => {
+    inventory.get("water")
+      .chain(i => Maybe.fromFalsy(i?.amount > 0))
+      .effect(x => inventory.changeAmount("water",quant))
+      .onNone(() => inventory.changeAmount("water",200))
+  }
 
   return (
     <div>
@@ -92,12 +99,13 @@ function App() {
         <StatusBar maxLevel={200} statusLevel={150} statusName="Oxygen" colors={Oxygen}/>
         <StatusBar maxLevel={200} statusLevel={75} statusName="Oxygen"/>
         <StatusBar maxLevel={200} statusLevel={20} statusName="Oxygen"/>
-        <StatusBar maxLevel={200} statusLevel={150} statusName="Water" colors={Water}/>
+        <StatusBar maxLevel={200} statusLevel={water} statusName="Water" colors={Water}/>
         <StatusBar maxLevel={200} statusLevel={75} statusName="Water"/>
         <StatusBar maxLevel={200} statusLevel={20} statusName="Water"/>
       </div>
       <div>
         <button onClick={handleReset}>Reset</button>
+        <button onClick={cycle(-50)}>Cycle Water</button>
       </div>
       <div>
         wood: {wood}

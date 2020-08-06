@@ -1079,6 +1079,13 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@juan-utils/ramda-structures@^2.12.1":
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/@juan-utils/ramda-structures/-/ramda-structures-2.12.1.tgz#1c0b7911eff878040bccb5248ff857f0239df421"
+  integrity sha512-rTVl64okqXFi8c3SToKPgfnSlUIpauVbxlw7OfqMQXPHhlyh7/FV0CkZwEFn8JuG9z2WkKSpnolvTEzuE9AgPw==
+  dependencies:
+    ramda "0.27.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -8535,7 +8542,7 @@ raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
-ramda@^0.27.0:
+ramda@0.27.0, ramda@^0.27.0:
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.0.tgz#915dc29865c0800bf3f69b8fd6c279898b59de43"
   integrity sha512-pVzZdDpWwWqEVVLshWUHjNwuVP7SfcmPraYuqocJp1yo2U1R7P+5QAfDhdItkuoGqIBnBYrtPp7rEPqDn9HlZA==
