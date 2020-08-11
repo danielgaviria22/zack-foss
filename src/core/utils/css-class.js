@@ -18,17 +18,19 @@ const _getClassName = (obj) => Object.entries(preProcess(obj)).map(([className,p
 
 export const getClassName = (obj) => {
     const __inner = _getClassName(obj)
-    const res = {
-        token: obj?.token || "&",
-        get base(){
+    const res = Object.assign(__inner,{
+        token(){ 
+            return obj?.token || "&"
+        },
+        base(){
             return obj?.base || __inner
         },
         extend(sub){
             return getClassName({
-                base: sub.replace(makeRegexp(this.token), this.base || "")
+                base: sub.replace(makeRegexp(this.token()), this.base() || "")
             })
         },
-        get(obj){
+        recompute(obj={}){
             return getClassName({
                 base: this.base,
                 ...obj
@@ -36,6 +38,6 @@ export const getClassName = (obj) => {
         },
         toString: () => __inner,
         [Symbol.toPrimitive]: () => __inner,
-    };
+    });
     return res;
 }

@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+}
+
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+    display: grid;
+    background-color: #030B1A;
+    grid-template-areas: 
+        "W W W W W W S S"
+        "W W W W W W S S"
+        "W W W W W W S S"
+        "W W W W W W S S"
+        "L L L L L L S S"
+        "L L L L L L S S"
+    ;
+
+    &__window-container {
+        grid-area: W;
+    }
+
+    &__sidebar-container {
+        grid-area: S;
+    }
+
+    &__log-container {
+        grid-area: L;
+    }
+}
