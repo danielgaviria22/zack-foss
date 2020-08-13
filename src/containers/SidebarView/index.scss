@@ -1,0 +1,23 @@
+.sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-start;
+    
+    &__tabs {
+        &__tab {
+            padding: 12px;
+            padding-top: 8px;
+            color: black;
+            background-color: gray;
+            border-radius: 4px 4px 0px 0px;
+            cursor: pointer;
+
+            &--selected {
+                padding: 12px;
+                background-color: white;
+            }
+        }
+    }
+}
