@@ -4,7 +4,7 @@ import { getClassName } from 'core/utils/css-class'
 import "./style.scss"
 
 const ActionItem = ({ data, children=[] }) => {
-    return <article className="action-log__line">
+    return <article className="action-log__item">
         {data || children}
     </article> 
 }
@@ -15,7 +15,7 @@ const scrollToBottom = (ref) => {
 }
 
 const ActionLog = (props) => {
-    const { lines, children, fluid, disableScroll } = props
+    const { lines, children, fluid=false, disableScroll=false } = props
     const scrollRef = useRef(null);
 
     useEffect(() => {

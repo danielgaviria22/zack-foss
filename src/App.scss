@@ -10,24 +10,28 @@ body {
     box-sizing: border-box;
     display: grid;
     background-color: #030B1A;
-    grid-template-areas: 
-        "W W W W W W S S"
-        "W W W W W W S S"
-        "W W W W W W S S"
-        "W W W W W W S S"
-        "L L L L L L S S"
-        "L L L L L L S S"
-    ;
+    grid-template-rows: repeat(10,1fr);
+    grid-template-columns: repeat(10,1fr);
 
     &__window-container {
-        grid-area: W;
+        grid-row-start: 1;
+        grid-row-end: 8;
+        grid-column-start: 1;
+        grid-column-end: 8;
     }
 
     &__sidebar-container {
-        grid-area: S;
+        grid-row-start: 1;
+        grid-row-end: 11;
+        grid-column-start: 8;
+        grid-column-end: 11;
     }
 
     &__log-container {
-        grid-area: L;
+        grid-row-start: 8;
+        grid-row-end: 11;
+        grid-column-start: 1;
+        grid-column-end: 8;
+        display: relative;
     }
 }

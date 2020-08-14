@@ -68,6 +68,14 @@ export const useCharacterStats = () => {
 }
 
 /**
+ * Gets the log
+ * @returns {string[]}
+ */
+export const useLog = () => {
+    return useSelector(dotPathOr({},"actionLog"));
+}
+
+/**
  * Gets character inventory
  * @typedef {{ id: string, amount?: number }} Item
  * @returns {import("../../structures/inventory").Inventory<Item>}

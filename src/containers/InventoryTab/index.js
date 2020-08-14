@@ -2,7 +2,7 @@ import React from 'react'
 import { useInventory } from 'core/hooks/state'
 import { getClassName } from 'core/utils/css-class';
 
-const Inventory = () => {
+const InventoryTab = () => {
     const inventory = useInventory();
     const root = getClassName({
         base: "inventory"
@@ -23,4 +23,4 @@ const Inventory = () => {
     </div>
 }
 
-export default Inventory
+export default InventoryTab

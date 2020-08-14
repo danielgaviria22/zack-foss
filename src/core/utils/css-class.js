@@ -35,9 +35,7 @@ export const getClassName = (obj) => {
                 base: this.base,
                 ...obj
             })
-        },
-        toString: () => __inner,
-        [Symbol.toPrimitive]: () => __inner,
+        }
     });
     return res;
 }

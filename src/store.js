@@ -9,6 +9,7 @@ const epicMiddleware = createEpicMiddleware()
 const initialState = {
     resources: {},
     flags: {},
+    actionLog: [],
     character: {
         effects: {},
         stats: {},

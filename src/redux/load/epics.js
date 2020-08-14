@@ -9,6 +9,7 @@ import { communicateSaved } from 'redux/save'
 import { fromActions } from 'core/utils/redux-utils'
 import Storage from 'core/middleware/storage'
 import { dotPathOr } from 'core/utils/functions'
+import { loadLog } from 'redux/actionLog'
 
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
@@ -17,6 +18,7 @@ const getFlags = pathOrEmptyObject("flags",__)
 const getStats = pathOrEmptyObject("character.stats",__)
 const getEffects = pathOrEmptyObject("character.effects",__)
 const getInventory = pathOrEmptyArray("character.inventory",__)
+const getActionLog = pathOrEmptyArray("actionLog",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
@@ -27,7 +29,8 @@ export const loadEpic = action$ => action$.pipe(
             compose( loadResources, getResources ),
             compose( loadStats, getStats ),
             compose( loadEffects, getEffects ),
-            compose( loadInventory, getInventory)
+            compose( loadInventory, getInventory),
+            compose( loadLog, getActionLog )
         )
     )
 )

@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { getClassName } from "core/utils/css-class"
 import { head } from 'ramda'
 import "./index.scss"
-import Inventory from "containers/Inventory"
+import InventoryTab from "containers/InventoryTab"
 
 const Tab = ({ text, selected, baseClass, onClick }) => {
     const root = baseClass.extend("&__tab").recompute({
@@ -41,7 +41,7 @@ const Content = ({ tab, baseClass }) => {
         {
             {
                 Action: <div></div>,
-                Inventory: <Inventory />
+                Inventory: <InventoryTab />
             }[tab]
         }
     </section>
