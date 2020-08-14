@@ -13,6 +13,7 @@ const identity = binary(I);
  * @property {(id: string, pred: (item: T) => boolean) => boolean} itemSatisfies
  * @property {(...ids: string[]) => T[]} queryItems
  * @property {() => T[]} getAvailableItems
+ * @property {() => Maybe<T[]>} maybeGetAllItems
  * @property {(id: string, amount: number) => any} changeAmount
  */
 /**
@@ -42,6 +43,7 @@ const createInventory = (data, updateFn=identity) => {
         },
         queryItems: (...ids) => ids.map(getItem),
         getAvailableItems: () => sortById(data),
+        maybeGetAllItems: () => Maybe.fromArray(data).map(sortById),
         changeAmount: (id, amount) => updateFn(id,amount)
     }
 } 
