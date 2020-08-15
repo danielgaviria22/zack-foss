@@ -1,10 +1,11 @@
 import { of } from "rxjs"
 import { extractWith, extract } from "core/utils/functions"
-import { propOr, identity } from "ramda"
+import { propOr, identity, zipObj } from "ramda"
 
 export const nullaryActionCreator = type => () => ({ type })
 export const unaryActionCreator = type => payload => ({ type, payload })
 export const nAryActionCreator = (type, f) => (...args) => ({ type, payload: f(...args) })
+export const shape = (...keys) => (...values) => zipObj(keys,values);
 
 export const fromActions = (...action) => (...data) => of(...action.map(extractWith(data)))
 export const fromActionsEager = (...actions) => of(...actions.map(extract))

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"
-import { prop } from 'ramda';
+import { prop, map } from 'ramda';
 import { dotPathOr } from "core/utils/functions";
 import { Inventory } from "core/structures";
 import { changeInventory } from "redux/status";
@@ -71,8 +71,8 @@ export const useCharacterStats = () => {
  * Gets the log
  * @returns {string[]}
  */
-export const useLog = () => {
-    return useSelector(dotPathOr({},"actionLog"));
+export const useLog = (mapper) => {
+    return map( mapper, useSelector(dotPathOr([],"actionLog")));
 }
 
 /**

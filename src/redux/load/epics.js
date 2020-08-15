@@ -29,7 +29,7 @@ export const loadEpic = action$ => action$.pipe(
             compose( loadResources, getResources ),
             compose( loadStats, getStats ),
             compose( loadEffects, getEffects ),
-            compose( loadInventory, getInventory),
+            compose( loadInventory, getInventory ),
             compose( loadLog, getActionLog )
         )
     )

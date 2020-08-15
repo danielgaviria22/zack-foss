@@ -1,10 +1,15 @@
 import { createEpicMiddleware } from 'redux-observable'
 import { createStore, applyMiddleware, compose } from 'redux'
+import { useDispatch } from "react-redux"
 
 import { rootEpic } from './epic'
 import { rootReducer } from './reducer'
 
-const epicMiddleware = createEpicMiddleware()
+const epicMiddleware = createEpicMiddleware({
+    dependencies: {
+        useDispatch
+    },
+})
 
 const initialState = {
     resources: {},
@@ -20,6 +25,7 @@ const initialState = {
 const initStore = () => {
     const composeEnhancers = 
         process.env.NODE_ENV === "development" ? 
+            // @ts-ignore
             window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : 
             compose;
 
@@ -40,4 +46,6 @@ const initStore = () => {
     return store;
 }
 
-export default initStore
+const store = initStore()
+
+export default store
