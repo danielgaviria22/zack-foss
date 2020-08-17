@@ -9,6 +9,7 @@ import { loadState } from 'redux/load';
 import { addFixedLine, addTemporalLine, addLine, resetLog } from 'redux/actionLog';
 import { startTimer, stopTimer } from 'redux/timer';
 import { changeStat } from 'redux/status';
+import { resetState } from 'redux/reset';
 import "App.scss"
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
   window["startTimer"] = compose( dispatch, startTimer );
   window["stopTimer"] = compose( dispatch, stopTimer );
   window["changeHP"] = compose( dispatch, (amount=-10) => changeStat("HP",amount) );
+  window["reset"] = compose( dispatch, resetState )
 
   return (
     <div className={base}>

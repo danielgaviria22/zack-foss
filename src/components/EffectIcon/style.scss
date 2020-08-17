@@ -1,7 +1,38 @@
 .effect {
+    $circle-diameter: 40px;
     border-radius: 50%;
-    height: 32px;
-    width: 32px;
+    height: $circle-diameter;
+    width: $circle-diameter;
     background-color: white;
     margin: 8px;
+    position: relative;
+
+    &__tooltip {
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px;
+        background-color: white;
+        border-radius: 6px;
+        opacity: 0;
+        transition: opacity 0.3s linear;
+        white-space: nowrap;
+
+        &--visible {
+            opacity: 1;
+            display: inline;
+        }
+
+        &::after {
+            content: " ";
+            position: absolute;
+            top: 100%; 
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+          }
+    }
 }

@@ -17,7 +17,7 @@ const EffectIcons = (props) => {
             toPairs(effects)
             .filter(nth(1))
             .map(head)
-            .map((effect,idx) => <EffectIcon key={idx} />)
+            .map((effect,idx) => <EffectIcon key={idx} name={effect}/>)
         }
     </div>
 }
