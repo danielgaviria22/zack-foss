@@ -1,41 +1,43 @@
-import { juxt } from "ramda"
 import { ofType } from "redux-observable";
-import { map, mergeMap, withLatestFrom } from 'rxjs/operators'
-import { fromActionsEager } from 'core/utils/redux-utils';
+import { juxt, isEmpty, complement, flatten } from "ramda"
+import { map, mergeMap, withLatestFrom, filter } from 'rxjs/operators'
 import Timer from "core/structures/timer";
-import { 
-    START_TIMER, STOP_TIMER, 
-    TICK, tick, ticked, 
-    startedTimer, stopped
-} from ".";
+import { fromActionsEager } from 'core/utils/redux-utils';
+import { START_TIMER, STOP_TIMER, TICK, tick } from ".";
+import { checkOxygen, checkEffects } from './timerEffects'
+
+const removeFalsy = arr => flatten(arr).filter(Boolean)
 
 export const timerEpic = (action$) => action$.pipe(
-    ofType(
-        START_TIMER,
-        STOP_TIMER
-    ),
+    ofType( START_TIMER, STOP_TIMER ),
     map((action) => {
         if( action.type === START_TIMER ){
             Timer().interval((store) => {
                 store.dispatch(tick())
             })
-            return startedTimer();
         } else {
             Timer().stopInterval();
-            return stopped()
         }
-    })
+    }),
+    filter(Boolean)
 )
 
-const processTick = []
+// Array of functions that have the following signature:
+// (state) => action | undefined
+// These functions should always return an action or undefined.
+// Any resulting falsy value is filtered out but undefined should be preferred
+const processTick = [
+    checkOxygen, checkEffects
+]
 
 export const tickEpic = (action$,state$) => action$.pipe(
     ofType(TICK),
     withLatestFrom(state$),
-    mergeMap(([,state]) => {
+    map(([,state]) => removeFalsy(juxt(processTick)(state))),
+    filter(complement(isEmpty)),
+    mergeMap(actions => {
         return fromActionsEager(
-            ...juxt(processTick)(state),
-            ticked
+            ...actions,
         )
     })
 )

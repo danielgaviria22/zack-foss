@@ -1,26 +1,11 @@
 import { createEpicMiddleware } from 'redux-observable'
 import { createStore, applyMiddleware, compose } from 'redux'
-import { useDispatch } from "react-redux"
 
 import { rootEpic } from './epic'
 import { rootReducer } from './reducer'
+import { initialState } from 'initialState'
 
-const epicMiddleware = createEpicMiddleware({
-    dependencies: {
-        useDispatch
-    },
-})
-
-const initialState = {
-    resources: {},
-    flags: {},
-    actionLog: [],
-    character: {
-        effects: {},
-        stats: {},
-        inventory: []
-    }
-}
+const epicMiddleware = createEpicMiddleware()
 
 const initStore = () => {
     const composeEnhancers = 

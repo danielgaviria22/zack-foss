@@ -71,7 +71,7 @@ export const useCharacterStats = () => {
  * Gets the log
  * @returns {string[]}
  */
-export const useLog = (mapper) => {
+export const useLog = (mapper=x => x) => {
     return map( mapper, useSelector(dotPathOr([],"actionLog")));
 }
 

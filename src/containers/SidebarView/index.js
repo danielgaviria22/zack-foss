@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { getClassName } from "core/utils/css-class"
 import { head } from 'ramda'
-import "./index.scss"
+import { getClassName } from "core/utils/css-class"
 import InventoryTab from "containers/InventoryTab"
+import "./index.scss"
 
 const Tab = ({ text, selected, baseClass, onClick }) => {
     const root = baseClass.extend("&__tab").recompute({

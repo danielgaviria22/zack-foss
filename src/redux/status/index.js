@@ -7,6 +7,7 @@ import { triggerBooleanProp, addToNumericProp } from "core/utils/functions";
 export const TRIGGER_STATUS_EFFECT = 'zack-foss/trigger-effects'
 export const RESET_STATUS_EFFECTS = 'zack-foss/reset-effects'
 export const LOAD_STATUS_EFFECTS = 'zack-foss/load-effects'
+export const CHANGE_STATUS_EFFECT = 'zack-foss/change-status-effect'
 
 export const CHANGE_STATUS_STATS = 'zack-foss/change-stats'
 export const RESET_STATUS_STATS = 'zack-foss/reset-stats'
@@ -20,6 +21,10 @@ const statusEffectReducer = createReducer({
     [TRIGGER_STATUS_EFFECT]: (state,action) => {
         const { payload } = action
         return triggerBooleanProp(payload,state)
+    },
+    [CHANGE_STATUS_EFFECT]: (state,action) => {
+        const { payload: { effect, amount } } = action
+        return addToNumericProp(effect,amount,state)
     },
     [LOAD_STATUS_EFFECTS]: loadState,
     [RESET_STATUS_EFFECTS]: resetState,
@@ -68,6 +73,7 @@ export default combineReducers({
 export const triggerEffect = unaryActionCreator(TRIGGER_STATUS_EFFECT);
 export const loadEffects = unaryActionCreator(LOAD_STATUS_EFFECTS);
 export const resetEffects = nullaryActionCreator(RESET_STATUS_EFFECTS);
+export const changeEffect = nAryActionCreator(CHANGE_STATUS_EFFECT,(effect,amount) => ({ effect , amount }))
 
 export const changeStat = nAryActionCreator(CHANGE_STATUS_STATS,(stat,amount) => ({ stat, amount}))
 export const loadStats = unaryActionCreator(LOAD_STATUS_STATS);

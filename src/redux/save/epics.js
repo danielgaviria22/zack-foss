@@ -1,11 +1,11 @@
-import { map, withLatestFrom, debounceTime } from 'rxjs/operators'
 import { ofType } from "redux-observable";
-import { SAVE, communicateSaved } from '.';
+import { map, withLatestFrom, debounceTime } from 'rxjs/operators'
+import { nth, compose, evolve, filter, takeLast } from "ramda"
 import Storage from 'core/middleware/storage';
 import { TRIGGER_FLAG } from 'redux/flags';
-import { TRIGGER_STATUS_EFFECT, CHANGE_STATUS_STATS, CHANGE_INVENTORY } from 'redux/status';
+import { TRIGGER_STATUS_EFFECT, CHANGE_STATUS_STATS, CHANGE_INVENTORY, CHANGE_STATUS_EFFECT } from 'redux/status';
 import { ADD_LINE } from 'redux/actionLog';
-import { nth, compose, evolve, filter, takeLast } from "ramda"
+import { SAVE, communicateSaved } from '.';
 
 const prepareState = compose((state) => {
     return evolve({
@@ -19,6 +19,7 @@ export const saveEpic = (action$, state$) => action$.pipe(
         TRIGGER_FLAG,
         CHANGE_STATUS_STATS,
         TRIGGER_STATUS_EFFECT,
+        CHANGE_STATUS_EFFECT,
         CHANGE_INVENTORY,
         ADD_LINE,
     ),

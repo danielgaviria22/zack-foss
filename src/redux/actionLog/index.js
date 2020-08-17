@@ -5,9 +5,9 @@ import {
 } from "../../core/utils/redux-utils"
 import { append, prop } from 'ramda'
 
-export const LOAD_LOG = "zack-foss/LOAD_LOG";
-export const ADD_LINE = "zack-foss/ADD_LINE";
-export const RESET_LOG = "zack-foss/RESET_LOG";
+export const LOAD_LOG = "zack-foss/load-log";
+export const ADD_LINE = "zack-foss/add-line";
+export const RESET_LOG = "zack-foss/reset-log";
 
 const getPayload = prop("payload");
 const appendFromAction = (state,action) => append(getPayload(action),state)
@@ -20,7 +20,8 @@ export default createReducer({
 })
 
 export const loadLog = unaryActionCreator(LOAD_LOG)
-export const addLine = nAryActionCreator(ADD_LINE,shape("message","temporal"));
-export const addFixedLine = nAryActionCreator(ADD_LINE, (message) => addLine(message,false))
-export const addTemporalLine = nAryActionCreator(ADD_LINE, (message) => addLine(message,true))
+const messageShape = shape("message","temporal")
+export const addLine = nAryActionCreator(ADD_LINE,messageShape);
+export const addFixedLine = nAryActionCreator(ADD_LINE, (message) => messageShape(message,false))
+export const addTemporalLine = nAryActionCreator(ADD_LINE, (message) => messageShape(message,true))
 export const resetLog = nullaryActionCreator(RESET_LOG)
