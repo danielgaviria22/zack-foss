@@ -2,6 +2,7 @@ export const initialState = {
     resources: {},
     flags: {},
     actionLog: [],
+    counters: {},
     character: {
         effects: {},
         stats: {

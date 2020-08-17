@@ -1,9 +1,13 @@
 import { dotPath } from 'core/utils/functions'
 import { changeStat, changeEffect } from 'redux/status';
 import { addTemporalLine } from 'redux/actionLog';
-import { Effects } from 'redux/status/constants';
+import { Effects, Counters, Flags, Status } from 'redux/status/constants';
+import { triggerFlag } from 'redux/flags';
 
 const getEffect = (effect,state) => dotPath(`character.effects.${effect}`,state)
+const getCounter = (counter,state) => dotPath(`counters.${counter}`,state)
+const getFlag = (flag,state) => dotPath(`flags.${flag}`,state)
+const getStat = (stat,state) => dotPath(`character.stats.${stat}`,state)
 
 export const checkOxygen = (state) => {
     const {
@@ -12,11 +16,17 @@ export const checkOxygen = (state) => {
 
     const Asphyxia = getEffect(Effects.Asphyxia,state)
     const Dizzy = getEffect(Effects.Dizzy,state)
+    const AutoBreathe = getFlag(Flags.AutoBreathe,state);
     
     let actions = []
+
+    const BREATHE_RATE = 2
+    if( AutoBreathe && OXYGEN <= MAX_OXYGEN - BREATHE_RATE ) {
+        actions.push(changeStat(Status.Oxygen,BREATHE_RATE))
+    }
     
     if( OXYGEN > 0 ){
-        actions.push(changeStat("OXYGEN",-10))
+        actions.push(changeStat(Status.Oxygen,-1))
     }
 
     if( HP > 10 && OXYGEN <= 0){
@@ -28,21 +38,31 @@ export const checkOxygen = (state) => {
     } else if( HP <= 10 && OXYGEN <= 0 ) {
         actions.push(changeStat("OXYGEN",MAX_OXYGEN))
         actions.push(addTemporalLine("You can no longer hold your breath and your body forcibly makes you inhale deeply..."))
-        if( Asphyxia > 0 ){
-            actions.push(changeEffect(Effects.Asphyxia,-1))
-        }
     }
 
-    if( OXYGEN <= 0 && !Dizzy ){
+    if( OXYGEN <= 10 && !Dizzy ){
         actions.push(changeEffect(Effects.Dizzy,10))
         actions.push(addTemporalLine("You start to feel dizzy"))
     }
+
+    if( Asphyxia > 0 && OXYGEN > 0){
+        actions.push(changeEffect(Effects.Asphyxia,-1))
+    }
+
     return actions
 }
 
+export const checkAutoBreathUnlock = (state) => {
+    const breaths = getCounter(Counters.Breaths,state);
+    if( breaths >= 10 && !getFlag(Flags.AutoBreatheUnlocked,state)){
+        return triggerFlag(Flags.AutoBreatheUnlocked)
+    }
+}
+
 export const checkEffects = (state) => {
+    const Oxygen = getStat(Status.Oxygen,state)
     const Dizzy = getEffect(Effects.Dizzy,state)
-    if( Dizzy > 0 ) {
+    if( Dizzy > 0 && Oxygen > 10) {
         const actions = [changeEffect(Effects.Dizzy,-1)]
         if( Dizzy === 1 ){
             actions.push(addTemporalLine("You feel you regain your composture"))

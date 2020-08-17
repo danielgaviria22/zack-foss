@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import { prop, map } from 'ramda';
-import { dotPathOr } from "core/utils/functions";
+import { dotPathOr, dotPath } from "core/utils/functions";
 import { Inventory } from "core/structures";
 import { changeInventory } from "redux/status";
 
@@ -13,7 +13,7 @@ export const useAllResources = () => useSelector(prop("resources"))
  * @returns {boolean}
  */
 export const useFlag = (flagName) => {
-    return useSelector(dotPathOr(false,`flags.${flagName}`),)
+    return useSelector(dotPathOr(false,`flags.${flagName}`))
 }
 
 /**
@@ -76,6 +76,23 @@ export const useLog = (mapper=x => x) => {
 }
 
 /**
+ * Tracks a single counter value. Defaults to undefined
+ * @param {string} name name of counter to track
+ * @returns {number | undefined}
+ */
+export const useCounter = (name) => {
+    return useSelector(dotPath(`counters.${name}`))
+}
+
+/**
+ * Returns all counters. Defaults to empty object
+ * @returns {{[x: string]: number}}
+ */
+export const useAllCounters = () => {
+    return useSelector(dotPathOr({},"counters"))
+}
+
+/**
  * Gets character inventory
  * @typedef {{ id: string, amount?: number }} Item
  * @returns {import("../../structures/inventory").Inventory<Item>}
@@ -87,3 +104,4 @@ export const useInventory = () => {
         (id,amount) => dispatch(changeInventory(id,amount))
     );
 }
+

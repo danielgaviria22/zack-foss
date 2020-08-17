@@ -7,12 +7,15 @@ import { TRIGGER_STATUS_EFFECT, CHANGE_STATUS_STATS, CHANGE_INVENTORY, CHANGE_ST
 import { ADD_LINE } from 'redux/actionLog';
 import { SAVE, communicateSaved } from '.';
 
+const removeFalsyProps = compose(fromPairs, filter(nth(1)) ,toPairs)
+
 const prepareState = compose((state) => {
     return evolve({
         actionLog: (msgs) => takeLast(20)(filter(x => !x.temporal,msgs)),
+        counters: removeFalsyProps,
         character: {
-            effects: compose(fromPairs, filter(nth(1)) ,toPairs)
-        }
+            effects: removeFalsyProps
+        },
     })(state)
 }, nth(1))
 

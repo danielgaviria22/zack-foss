@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { combineReducers } from "redux";
 import { propEq, equals, ifElse, always, filter, compose, propSatisfies, findIndex, adjust, evolve, add, append, none } from "ramda";
-import { nAryActionCreator, createReducer, resetState, nullaryActionCreator, unaryActionCreator, loadState } from "core/utils/redux-utils";
+import { nAryActionCreator, createReducer, nullaryActionCreator, unaryActionCreator, loadState, resetToInitialState } from "core/utils/redux-utils";
 import { triggerBooleanProp, addToNumericProp } from "core/utils/functions";
 
 export const TRIGGER_STATUS_EFFECT = 'zack-foss/trigger-effects'
@@ -27,7 +27,7 @@ const statusEffectReducer = createReducer({
         return addToNumericProp(effect,amount,state)
     },
     [LOAD_STATUS_EFFECTS]: loadState,
-    [RESET_STATUS_EFFECTS]: resetState,
+    [RESET_STATUS_EFFECTS]: resetToInitialState("character.effects"),
 })
 
 const statusStatsReducer = createReducer({
@@ -36,7 +36,7 @@ const statusStatsReducer = createReducer({
         return addToNumericProp(stat,amount,state)
     },
     [LOAD_STATUS_STATS]: loadState,
-    [RESET_STATUS_STATS]: resetState,
+    [RESET_STATUS_STATS]: resetToInitialState("character.stats"),
 })
 
 const statusInventoryReducer = createReducer({

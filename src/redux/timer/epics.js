@@ -4,7 +4,7 @@ import { map, mergeMap, withLatestFrom, filter } from 'rxjs/operators'
 import Timer from "core/structures/timer";
 import { fromActionsEager } from 'core/utils/redux-utils';
 import { START_TIMER, STOP_TIMER, TICK, tick } from ".";
-import { checkOxygen, checkEffects } from './timerEffects'
+import { checkOxygen, checkEffects, checkAutoBreathUnlock } from './timerEffects'
 
 const removeFalsy = arr => flatten(arr).filter(Boolean)
 
@@ -27,7 +27,7 @@ export const timerEpic = (action$) => action$.pipe(
 // These functions should always return an action or undefined.
 // Any resulting falsy value is filtered out but undefined should be preferred
 const processTick = [
-    checkOxygen, checkEffects
+    checkOxygen, checkEffects, checkAutoBreathUnlock
 ]
 
 export const tickEpic = (action$,state$) => action$.pipe(

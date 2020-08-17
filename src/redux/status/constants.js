@@ -9,3 +9,12 @@ export const Status = {
     Oxygen: "OXYGEN",
     MaxOxygen: "MAX_OXYGEN",
 }
+
+export const Flags = {
+    AutoBreathe: "AutoBreathe",
+    AutoBreatheUnlocked: "AutoBreatheUnlocked"
+}
+
+export const Counters = {
+    Breaths: "Breaths"
+}

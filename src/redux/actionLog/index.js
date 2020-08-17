@@ -1,9 +1,10 @@
-import { 
-    createReducer, loadState, resetState, 
-    unaryActionCreator, nullaryActionCreator, nAryActionCreator,
-    shape
-} from "../../core/utils/redux-utils"
 import { append, prop } from 'ramda'
+import { 
+    createReducer, loadState,  
+    unaryActionCreator, nullaryActionCreator, nAryActionCreator,
+    shape,
+    resetToInitialState
+} from "../../core/utils/redux-utils"
 
 export const LOAD_LOG = "zack-foss/load-log";
 export const ADD_LINE = "zack-foss/add-line";
@@ -16,7 +17,7 @@ const onAddLine = (state,action) => appendFromAction(state,action)
 export default createReducer({
     [ADD_LINE]: onAddLine,
     [LOAD_LOG]: loadState,
-    [RESET_LOG]: resetState
+    [RESET_LOG]: resetToInitialState("actionLog")
 })
 
 export const loadLog = unaryActionCreator(LOAD_LOG)

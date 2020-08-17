@@ -3,6 +3,7 @@ import { head } from 'ramda'
 import { getClassName } from "core/utils/css-class"
 import InventoryTab from "containers/InventoryTab"
 import "./index.scss"
+import ActionsTab from "containers/ActionsTab"
 
 const Tab = ({ text, selected, baseClass, onClick }) => {
     const root = baseClass.extend("&__tab").recompute({
@@ -40,7 +41,7 @@ const Content = ({ tab, baseClass }) => {
     return <section className={root}>
         {
             {
-                Action: <div></div>,
+                Actions: <ActionsTab />,
                 Inventory: <InventoryTab />
             }[tab]
         }

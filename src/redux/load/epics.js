@@ -11,6 +11,7 @@ import { dotPathOr, dotPathOrFrom } from 'core/utils/functions'
 import { loadLog } from 'redux/actionLog'
 import { LOAD, INJECT, loadState, injectionError } from '.'
 import { initialState } from 'initialState'
+import { loadCounters } from 'redux/counters'
 
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
@@ -21,6 +22,7 @@ const getStats = pathOrInitialStatePath("character.stats",__)
 const getEffects = pathOrEmptyObject("character.effects",__)
 const getInventory = pathOrEmptyArray("character.inventory",__)
 const getActionLog = pathOrEmptyArray("actionLog",__)
+const getCounters = pathOrEmptyObject("counters",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
@@ -32,7 +34,8 @@ export const loadEpic = action$ => action$.pipe(
             compose( loadStats, getStats ),
             compose( loadEffects, getEffects ),
             compose( loadInventory, getInventory ),
-            compose( loadLog, getActionLog )
+            compose( loadLog, getActionLog ),
+            compose( loadCounters, getCounters ),
         )
     )
 )
