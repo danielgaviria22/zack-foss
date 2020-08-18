@@ -1,11 +1,12 @@
 const makeRegexp = (tok="&") => new RegExp(tok,"gi")
 const preProcess = obj => {
     if(obj.base){
-        const { base, token="&", ...rest } = obj
-        if(rest[token] === undefined){
-            rest[token] = true
-        };
-        return Object.fromEntries(Object.entries(rest).map(([ key, val ]) => [ key.replace(makeRegexp(token),base), val]))
+        const { token="&", ...rest } = obj
+        const entries = Object.entries(rest)
+            .map(([ key, val]) => key === "base" ? [val, true] : [key,val])
+            .map(([ key, val ]) => [ key.replace(makeRegexp(token),obj.base), val])
+        
+        return Object.fromEntries(entries) 
     } else {
         return obj
     }
@@ -32,7 +33,7 @@ export const getClassName = (obj) => {
         },
         recompute(obj={}){
             return getClassName({
-                base: this.base,
+                base: this.base(),
                 ...obj
             })
         }
