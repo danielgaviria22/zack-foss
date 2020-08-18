@@ -6,6 +6,7 @@ import { TRIGGER_FLAG } from 'redux/flags';
 import { TRIGGER_STATUS_EFFECT, CHANGE_STATUS_STATS, CHANGE_INVENTORY, CHANGE_STATUS_EFFECT } from 'redux/status';
 import { ADD_LINE } from 'redux/actionLog';
 import { SAVE, communicateSaved } from '.';
+import { SET_COUNTER, DEC_COUNTER, INC_COUNTER } from "redux/counters";
 
 const removeFalsyProps = compose(fromPairs, filter(nth(1)) ,toPairs)
 
@@ -27,6 +28,7 @@ export const saveEpic = (action$, state$) => action$.pipe(
         TRIGGER_STATUS_EFFECT,
         CHANGE_STATUS_EFFECT,
         CHANGE_INVENTORY,
+        SET_COUNTER, DEC_COUNTER, INC_COUNTER,
         ADD_LINE,
     ),
     filterActions(action => {
