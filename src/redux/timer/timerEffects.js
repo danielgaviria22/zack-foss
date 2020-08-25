@@ -3,6 +3,7 @@ import { changeStat, changeEffect } from 'redux/status';
 import { addTemporalLine } from 'redux/actionLog';
 import { Effects, Counters, Flags, Status } from 'redux/status/constants';
 import { triggerFlag } from 'redux/flags';
+import { Maybe } from '@juan-utils/ramda-structures';
 
 const getEffect = (effect,state) => dotPath(`character.effects.${effect}`,state)
 const getCounter = (counter,state) => dotPath(`counters.${counter}`,state)
@@ -49,24 +50,26 @@ export const checkOxygen = (state) => {
         actions.push(changeEffect(Effects.Asphyxia,-1))
     }
 
-    return actions
+    return Maybe.fromArray(actions)
 }
 
 export const checkAutoBreathUnlock = (state) => {
     const breaths = getCounter(Counters.Breaths,state);
     if( breaths >= 10 && !getFlag(Flags.AutoBreatheUnlocked,state)){
-        return triggerFlag(Flags.AutoBreatheUnlocked)
+        return Maybe.fromArray([ triggerFlag(Flags.AutoBreatheUnlocked) ])
     }
+    return Maybe.None()
 }
 
 export const checkEffects = (state) => {
     const Oxygen = getStat(Status.Oxygen,state)
     const Dizzy = getEffect(Effects.Dizzy,state)
+    let actions = []
     if( Dizzy > 0 && Oxygen > 10) {
-        const actions = [changeEffect(Effects.Dizzy,-1)]
+        actions.push(changeEffect(Effects.Dizzy,-1))
         if( Dizzy === 1 ){
             actions.push(addTemporalLine("You feel you regain your composture"))
         }
-        return actions
-    } 
+    }
+    return Maybe.fromArray(actions);
 }
