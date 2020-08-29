@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense , useEffect } from 'react';
 import { compose } from 'ramda';
 import CharacterView from 'containers/CharacterView';
 import SidebarView from 'containers/SidebarView';
@@ -10,6 +10,7 @@ import { addFixedLine, addTemporalLine, addLine, resetLog } from 'redux/actionLo
 import { startTimer, stopTimer } from 'redux/timer';
 import { changeStat } from 'redux/status';
 import { resetState } from 'redux/reset';
+import Spinner from 'components/Spinner';
 import "App.scss"
 
 function App() {
@@ -37,15 +38,17 @@ function App() {
 
   return (
     <div className={base}>
-      <main className={mainContainer}>
-        <CharacterView />
-      </main>
-      <div className={sidebarContainer}>
-        <SidebarView />
-      </div>
-      <div className={logContainer}>
-        <ActionLogView />
-      </div>
+      <Suspense fallback={<Spinner />}>
+        <main className={mainContainer}>
+          <CharacterView />
+        </main>
+        <div className={sidebarContainer}>
+          <SidebarView />
+        </div>
+        <div className={logContainer}>
+          <ActionLogView />
+        </div>
+      </Suspense>
     </div>
   );
 }

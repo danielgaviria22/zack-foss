@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { changeStat } from 'redux/status';
 import { Status, Flags, Counters } from 'redux/status/constants';
 import { triggerFlag } from 'redux/flags';
-import { useFlag, useCharacterStat } from 'core/hooks/state';
+import { useFlag, useStat } from 'core/hooks/state';
 import { incCounter } from 'redux/counters';
 import "./style.scss"
 
@@ -13,8 +13,8 @@ const ActionsTab = () => {
 
     const AutoBreathe = useFlag(Flags.AutoBreathe);
     const AutoBreatheUnlocked = useFlag(Flags.AutoBreatheUnlocked);
-    const Oxygen = useCharacterStat(Status.Oxygen)
-    const MaxOxygen = useCharacterStat(Status.MaxOxygen);
+
+    const [ Oxygen, MaxOxygen ] = useStat(Status.Oxygen)
 
     const dispatch = useDispatch();
 

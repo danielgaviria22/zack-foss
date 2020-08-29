@@ -10,6 +10,8 @@ export const initialState = {
             MAX_OXYGEN: 100,
             HP: 100,
             MAX_HP: 100,
+            STAMINA: 100,
+            MAX_STAMINA: 100,
         },
         inventory: []
     }

@@ -66,4 +66,14 @@ export const Water = {
     high: "#1A67EE" 
 }
 
+export const Stamina = {
+    high: "yellow"
+}
+
+export const Colors = {
+    OXYGEN: Oxygen, 
+    WATER: Water,
+    STAMINA: Stamina
+}
+
 export default StatusBar;

@@ -8,6 +8,8 @@ export const Status = {
     MaxHP: "MAX_HP",
     Oxygen: "OXYGEN",
     MaxOxygen: "MAX_OXYGEN",
+    Stamina: "STAMINA",
+    MaxStamina: "MAX_STAMINA"
 }
 
 export const Flags = {

@@ -55,7 +55,7 @@ export const useStatusEffects = () => {
  * @param {string} stat 
  * @returns {number}
  */
-export const useCharacterStat = (stat) => {
+export const useSingleStat = (stat) => {
     return useSelector(dotPathOr(0,`character.stats.${stat}`))
 }
 
@@ -65,6 +65,18 @@ export const useCharacterStat = (stat) => {
  */
 export const useCharacterStats = () => {
     return useSelector(dotPathOr({},`character.stats`))
+}
+
+/**
+ * Gets a character stat and its max value. Defaults to [0,0]
+ * @param {string} stat 
+ * @returns {[ number, number ]}
+ */
+export const useStat = (stat) => {
+    return [
+        useSingleStat(stat),
+        useSingleStat(`MAX_${stat}`)
+    ]
 }
 
 /**

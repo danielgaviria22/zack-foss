@@ -1,32 +1,39 @@
 import React from 'react'
-import { useCharacterStats } from 'core/hooks/state'
+import { useStat } from 'core/hooks/state'
 import { getClassName } from 'core/utils/css-class';
-import StatusBar , { Oxygen } from 'components/StatusBar';
+import StatusBar from 'components/StatusBar';
+import { Stats } from './constants'
+import { useTranslation } from 'react-i18next';
 import "./style.scss"
 
-const StatusBars = (props) => {
-    const characterStatus = useCharacterStats();
+const Bar = ({ stat, statusName, colors }) => {
+    const [ value, maxValue ] = useStat(stat);
+    return <StatusBar 
+        statusName={statusName}
+        statusLevel={value}
+        maxLevel={maxValue}
+        colors={colors}
+    />
+}
+
+const StatusBars = () => {
+
+    const { t } = useTranslation("stats")
+
     const rootClass = getClassName({
         base: "status-bars"
     })
 
-    const {
-        OXYGEN, MAX_OXYGEN,
-        HP, MAX_HP,
-    } = characterStatus
-
     return <div className={rootClass}>
-        <StatusBar 
-            statusName="HP"
-            statusLevel={HP}
-            maxLevel={MAX_HP}
-        />
-        <StatusBar 
-            statusName="Oxygen"
-            statusLevel={OXYGEN}
-            maxLevel={MAX_OXYGEN}
-            colors={Oxygen} 
-        />
+       { Stats.map(({ stat, colors }) => {
+            const name = t(stat)
+            return <Bar 
+                key={stat}
+                statusName={name}
+                stat={stat}
+                colors={colors}
+            />
+       })}
     </div>
 }
 
