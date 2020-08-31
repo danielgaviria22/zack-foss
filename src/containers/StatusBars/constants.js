@@ -6,8 +6,9 @@ const getColor = (name) => prop(name,Colors);
 
 export const OrderedStats = [
     Status.HP,
-    Status.Oxygen,
     Status.Stamina,
+    Status.Oxygen,
+    Status.Water
 ]
 
 export const Stats = OrderedStats.map(stat => {

@@ -26,9 +26,7 @@ export const checkOxygen = (state) => {
         actions.push(changeStat(Status.Oxygen,BREATHE_RATE))
     }
     
-    if( OXYGEN > 0 ){
-        actions.push(changeStat(Status.Oxygen,-1))
-    }
+    actions.push(changeStat(Status.Oxygen,-1))  
 
     if( HP > 10 && OXYGEN <= 0){
         actions.push(changeStat("HP",-1))
@@ -41,9 +39,11 @@ export const checkOxygen = (state) => {
         actions.push(addTemporalLine("You can no longer hold your breath and your body forcibly makes you inhale deeply..."))
     }
 
-    if( OXYGEN <= 10 && !Dizzy ){
-        actions.push(changeEffect(Effects.Dizzy,10))
-        actions.push(addTemporalLine("You start to feel dizzy"))
+    if( OXYGEN <= 10 ){
+        actions.push(changeEffect(Effects.Dizzy,10 - (Dizzy || 0)))
+        if( !Dizzy ){
+            actions.push(addTemporalLine("You start to feel dizzy"))
+        }
     }
 
     if( Asphyxia > 0 && OXYGEN > 0){

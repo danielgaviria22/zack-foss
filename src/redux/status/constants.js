@@ -9,7 +9,9 @@ export const Status = {
     Oxygen: "OXYGEN",
     MaxOxygen: "MAX_OXYGEN",
     Stamina: "STAMINA",
-    MaxStamina: "MAX_STAMINA"
+    MaxStamina: "MAX_STAMINA",
+    Water: "WATER",
+    MaxWater: "MAX_WATER",
 }
 
 export const Flags = {

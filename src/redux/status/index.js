@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { combineReducers } from "redux";
-import { propEq, equals, ifElse, always, filter, compose, propSatisfies, findIndex, adjust, evolve, add, append, none } from "ramda";
+import { propEq, equals, ifElse, always, filter, compose, propSatisfies, findIndex, adjust, evolve, add, append, none, isNil } from "ramda";
 import { nAryActionCreator, createReducer, nullaryActionCreator, unaryActionCreator, loadState, resetToInitialState } from "core/utils/redux-utils";
 import { triggerBooleanProp, addToNumericProp } from "core/utils/functions";
 
@@ -17,6 +17,20 @@ export const CHANGE_INVENTORY = 'zack-foss/change-inventory'
 export const LOAD_STATUS_INVENTORY = 'zack-foss/load-inventory'
 export const EMPTY_INVENTORY = 'zack-foss/empty-inventory'
 
+const limitAmount = (stat,amount,state) => {
+    const max = state[`MAX_${stat}`];
+    const min = state[`MIN_${stat}`] || 0;
+    const curVal = state[stat] || 0;
+    const newVal = (state[stat] + amount)
+    if( !isNil(max) && newVal > max ){
+        return max - curVal;
+    }
+    if( !isNil(min) && newVal < min ){
+        return min - curVal;
+    }
+    return amount;
+}
+
 const statusEffectReducer = createReducer({
     [TRIGGER_STATUS_EFFECT]: (state,action) => {
         const { payload } = action
@@ -32,7 +46,8 @@ const statusEffectReducer = createReducer({
 
 const statusStatsReducer = createReducer({
     [CHANGE_STATUS_STATS]: (state,action) => {
-        const { payload: { stat, amount } } = action
+        const { payload: { stat, amount:rawAmount } } = action
+        const amount = limitAmount(stat,rawAmount,state)
         return addToNumericProp(stat,amount,state)
     },
     [LOAD_STATUS_STATS]: loadState,

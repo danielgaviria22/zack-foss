@@ -7,6 +7,7 @@ export const en = {
     stats: {
         HP: "HP",
         OXYGEN: "Oxygen",
-        STAMINA: "Stamina"
+        STAMINA: "Stamina",
+        WATER: "Water"
     }
 }

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { changeStat } from 'redux/status';
 import { Status, Flags, Counters } from 'redux/status/constants';
 import { triggerFlag } from 'redux/flags';
-import { useFlag, useStat } from 'core/hooks/state';
+import { useFlag } from 'core/hooks/state';
 import { incCounter } from 'redux/counters';
 import "./style.scss"
 
@@ -14,14 +14,10 @@ const ActionsTab = () => {
     const AutoBreathe = useFlag(Flags.AutoBreathe);
     const AutoBreatheUnlocked = useFlag(Flags.AutoBreatheUnlocked);
 
-    const [ Oxygen, MaxOxygen ] = useStat(Status.Oxygen)
-
     const dispatch = useDispatch();
 
     const handleBreath = () => {
-        const capacity = MaxOxygen - Oxygen;
-        let breathIn = capacity > 10 ? 10 : capacity
-        dispatch(changeStat(Status.Oxygen,breathIn));
+        dispatch(changeStat(Status.Oxygen,10));
         if( !AutoBreatheUnlocked ){
             dispatch(incCounter(Counters.Breaths));
         }
@@ -34,7 +30,7 @@ const ActionsTab = () => {
     const root = getClassName({ base: "actions-tab" });
 
     return <div className={root}>
-        <Button onClick={handleBreath}>Deep Breath</Button>
+        <Button onClick={handleBreath} loadingTime={2} >Deep Breath</Button>
         {AutoBreatheUnlocked && 
             <div>
             <input 

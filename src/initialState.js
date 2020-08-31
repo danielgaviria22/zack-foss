@@ -12,6 +12,8 @@ export const initialState = {
             MAX_HP: 100,
             STAMINA: 100,
             MAX_STAMINA: 100,
+            WATER: 100,
+            MAX_WATER: 100,
         },
         inventory: []
     }
