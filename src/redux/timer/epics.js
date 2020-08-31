@@ -21,7 +21,7 @@ export const timerEpic = (action$) => action$.pipe(
 )
 
 // Array of functions that have the following signature:
-// (state) => Maybe<action[]>
+// (state) => Maybe<action | action[]>
 // These functions should always return a Maybe of action array.
 // Should return Maybe.None when no changes are required
 /**
@@ -32,13 +32,21 @@ export const timerEpic = (action$) => action$.pipe(
  * @typedef {{ type: string, payload?: any}} Action
  * @typedef {(state: any) => Maybe<Action | Action[]>} ActionGenerator
  * @constant processTick
+ * @description Array of functions that return Maybe<Action | Action[]>
  * @type {ActionGenerator[]}
  */
 const processTick = [
     checkOxygen, checkAutoBreathUnlock
 ]
 
+/**
+ * @param {Maybe<Action | Action[]>} maybeAction
+ */
 const getActions = maybeAction => maybeAction.onNone(() => [])
+/**
+ * @param {Maybe<Action | Action[]>[]} arr
+ * @returns {Action[]}
+ */
 const unwrapActions = arr => arr.flatMap(getActions)
 
 export const tickEpic = (action$,state$) => action$.pipe(

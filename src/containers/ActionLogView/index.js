@@ -1,12 +1,11 @@
 import React from "react"
-import { prop } from "ramda"
 import ActionLog from "components/ActionLog"
-import { useLog } from "core/hooks/state"
+import { useLogMessages } from "core/hooks/state"
 import { getClassName } from "core/utils/css-class"
 import "./style.scss"
 
 const ActionLogView = () => {
-    const lines = useLog(prop("message"));
+    const lines = useLogMessages();
 
     const root = getClassName({
         base: "action-log-view",

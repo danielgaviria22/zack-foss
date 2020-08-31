@@ -26,10 +26,9 @@ const StatusBars = () => {
 
     return <div className={rootClass}>
        { Stats.map(({ stat, colors }) => {
-            const name = t(stat)
             return <Bar 
                 key={stat}
-                statusName={name}
+                statusName={t(stat)}
                 stat={stat}
                 colors={colors}
             />

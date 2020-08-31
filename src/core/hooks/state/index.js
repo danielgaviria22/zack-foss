@@ -78,13 +78,22 @@ export const useStat = (stat) => {
         useSingleStat(`MAX_${stat}`)
     ]
 }
-
+/**
+ * @typedef {{ message: string; temporal: boolean }} Message
+ */
 /**
  * Gets the log
- * @returns {string[]}
+ * @returns {Message[]}
  */
-export const useLog = (mapper=x => x) => {
-    return map( mapper, useSelector(dotPathOr([],"actionLog")));
+export const useLog = () => {
+    return useSelector(dotPathOr([],"actionLog"));
+}
+/**
+ * Gets log messages
+ * @returns {string[]} messages
+ */
+export const useLogMessages = () => {
+    return map( prop("message"), useLog());
 }
 
 /**
