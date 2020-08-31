@@ -4,7 +4,7 @@ import { map, mergeMap, withLatestFrom, filter } from 'rxjs/operators'
 import Timer from "core/structures/timer";
 import { fromActionsEager } from 'core/utils/redux-utils';
 import { START_TIMER, STOP_TIMER, TICK, tick } from ".";
-import { checkOxygen, checkEffects, checkAutoBreathUnlock } from './timerEffects'
+import { checkOxygen, checkAutoBreathUnlock } from './timerEffects'
 
 export const timerEpic = (action$) => action$.pipe(
     ofType( START_TIMER, STOP_TIMER ),
@@ -30,12 +30,12 @@ export const timerEpic = (action$) => action$.pipe(
  */
 /** 
  * @typedef {{ type: string, payload?: any}} Action
- * @typedef {(state: any) => Maybe<Action[]>} ActionGenerator
+ * @typedef {(state: any) => Maybe<Action | Action[]>} ActionGenerator
  * @constant processTick
  * @type {ActionGenerator[]}
  */
 const processTick = [
-    checkOxygen, checkEffects, checkAutoBreathUnlock
+    checkOxygen, checkAutoBreathUnlock
 ]
 
 const getActions = maybeAction => maybeAction.onNone(() => [])

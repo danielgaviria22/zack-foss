@@ -67,7 +67,7 @@ export const Water = {
 }
 
 export const Stamina = {
-    high: "yellow"
+    high: "orange"
 }
 
 export const Colors = {
