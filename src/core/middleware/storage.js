@@ -1,5 +1,5 @@
 import { compose , isNil } from "ramda"
-import { Result } from "core/structures";
+import { Result } from "@juan-utils/ramda-structures";
 
 const SAVE_KEY = "__zack_foss__"
 
@@ -28,7 +28,7 @@ const Storage = {
         try {
             return Result.Ok(fromEncodedJSON(local.get(SAVE_KEY)));
         } catch(e) {
-            return Result.Error({
+            return Result.Err({
                 data: local.get(SAVE_KEY),
                 name: e.name,
                 message: e.message
@@ -44,7 +44,7 @@ const Storage = {
             this.save(data)
             return Result.Ok(data);
         } catch(e) {
-            return Result.Error({
+            return Result.Err({
                 data: raw,
                 name: e.name,
                 message: e.message,

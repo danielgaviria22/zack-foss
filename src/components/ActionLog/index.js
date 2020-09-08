@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react'
+import { Maybe } from '@juan-utils/ramda-structures'
 import { getClassName } from 'core/utils/css-class'
-import { Maybe } from 'core/structures'
 import "./style.scss"
 
-const ActionItem = ({ data, children }) => {
-    return <article className="action-log__line">
+const ActionItem = ({ data, children=[] }) => {
+    return <article className="action-log__item">
         {data || children}
     </article> 
 }
@@ -15,7 +15,7 @@ const scrollToBottom = (ref) => {
 }
 
 const ActionLog = (props) => {
-    const { lines, children, fluid, disableScroll } = props
+    const { lines, children, fluid=false, disableScroll=false } = props
     const scrollRef = useRef(null);
 
     useEffect(() => {

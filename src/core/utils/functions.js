@@ -1,4 +1,4 @@
-import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, isNil } from 'ramda'
+import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, isNil, path } from 'ramda'
 import { compose } from 'redux';
 
 /**
@@ -27,6 +27,20 @@ export const extract = (value) => extractWith([])(value)
  * dotPathOr(0,"a.b.c",{ a: { b: { } } }) // returns 0
  */
 export const dotPathOr = curryN(3,(or,path,obj) => pathOr(or,path.split("."),obj));
+
+
+
+/**
+ * @description calls ramda path function using dot(.) separated paths. The function is curried using ramda
+ * @param {string} path dot separated path
+ * @param {object} obj obj to get path from
+ * @example 
+ * dotPath("a.b.c",{ a: { b: { c: 5 } } }) // returns 5
+ * dotPath("a.b.c",{ a: { b: { } } }) // returns undefined
+ */
+export const dotPath = curryN(2,(pathStr,obj) => path(pathStr.split("."),obj))
+
+export const dotPathOrFrom = curryN(3, (other,str,obj) => dotPath(str,obj) || dotPath(str,other))
 
 /**
  * @description maps an object's keys returning a new object with the mapped keys

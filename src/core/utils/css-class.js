@@ -1,18 +1,42 @@
-import { toPairs, filter, propOr, join, pipe, map, head, compose } from "ramda"
-import { extract } from 'core/utils/functions'
+const makeRegexp = (tok="&") => new RegExp(tok,"gi")
+const preProcess = obj => {
+    if(obj.base){
+        const { token="&", ...rest } = obj
+        const entries = Object.entries(rest)
+            .map(([ key, val]) => key === "base" ? [val, true] : [key,val])
+            .map(([ key, val ]) => [ key.replace(makeRegexp(token),obj.base), val])
+        
+        return Object.fromEntries(entries) 
+    } else {
+        return obj
+    }
+}
 
-const validate = compose( extract , propOr(false,"1"))
+const _getClassName = (obj) => Object.entries(preProcess(obj)).map(([className,pred]) => {
+    const shouldConcat = typeof(pred) === "function" ? pred() : pred;
+    return shouldConcat ? className : undefined
+}).filter(Boolean).join(" ")
 
-/**
- * @description receives an object of boolean values or predicates and returns the concatenation of keys that resolve to true
- * @typedef {{(): boolean}} Predicate
- * @typedef {{ [key: string] : Predicate | boolean }} ClassConfig
- * @param {ClassConfig} classConfig
- * @example getClassName({ button: true, blue: () => false, red: () => 42 === 42 }) // returns "button red"
- */
-export const getClassName = (classConfig) => pipe(
-    toPairs,
-    filter(validate), 
-    map(head),
-    join(" ")
-)(classConfig)
+export const getClassName = (obj) => {
+    const __inner = _getClassName(obj)
+    const res = Object.assign(__inner,{
+        token(){ 
+            return obj?.token || "&"
+        },
+        base(){
+            return obj?.base || __inner
+        },
+        extend(sub){
+            return getClassName({
+                base: sub.replace(makeRegexp(this.token()), this.base() || "")
+            })
+        },
+        recompute(obj={}){
+            return getClassName({
+                base: this.base(),
+                ...obj
+            })
+        }
+    });
+    return res;
+}

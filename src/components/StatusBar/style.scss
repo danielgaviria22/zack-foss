@@ -1,9 +1,7 @@
 .barContainer {
     display: flex;
     color: white;
-    height: 50px;
     align-items: center;
-    background-color: black;
     font-family: 'roboto';
     padding: 10px;
 
@@ -22,6 +20,9 @@
     overflow: hidden;
     box-sizing: border-box;
     margin: 0 10px;
+    .inner-bar {
+        transition: all 0.2s ease-out;
+    }
     & > div {
         height: 25px;
     }

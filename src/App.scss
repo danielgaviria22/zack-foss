@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+}
+
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+    display: grid;
+    background-color: #030B1A;
+    grid-template-rows: repeat(10,1fr);
+    grid-template-columns: repeat(10,1fr);
+
+    &__window-container {
+        grid-row-start: 1;
+        grid-row-end: 8;
+        grid-column-start: 1;
+        grid-column-end: 8;
+    }
+
+    &__sidebar-container {
+        grid-row-start: 1;
+        grid-row-end: 11;
+        grid-column-start: 8;
+        grid-column-end: 11;
+    }
+
+    &__log-container {
+        grid-row-start: 8;
+        grid-row-end: 11;
+        grid-column-start: 1;
+        grid-column-end: 8;
+        display: relative;
+    }
+}

@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import createStore from './store'
-
-const store = createStore();
+import store from './store'
+import "./i18n.js";
 
 ReactDOM.render(
     <Provider store={store}>

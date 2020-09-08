@@ -1,4 +1,4 @@
-import Maybe from "./maybe"
+import { Maybe } from '@juan-utils/ramda-structures'
 import { F as False, always, prop, sortBy, identity as I, binary } from "ramda"
 import { propNeq } from "core/utils/functions"
 
@@ -7,12 +7,13 @@ const identity = binary(I);
 /**
  * @template T
  * @typedef Inventory
- * @property {(id: string) => import("./maybe").Maybe<T>} get
+ * @property {(id: string) => Maybe<T>} get
  * @property {(id: string) => T} getItem
  * @property {(id: string) => boolean} hasItem
  * @property {(id: string, pred: (item: T) => boolean) => boolean} itemSatisfies
  * @property {(...ids: string[]) => T[]} queryItems
  * @property {() => T[]} getAvailableItems
+ * @property {() => Maybe<T[]>} maybeGetAllItems
  * @property {(id: string, amount: number) => any} changeAmount
  */
 /**
@@ -42,6 +43,7 @@ const createInventory = (data, updateFn=identity) => {
         },
         queryItems: (...ids) => ids.map(getItem),
         getAvailableItems: () => sortById(data),
+        maybeGetAllItems: () => Maybe.fromArray(data).map(sortById),
         changeAmount: (id, amount) => updateFn(id,amount)
     }
 } 

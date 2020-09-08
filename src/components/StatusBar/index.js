@@ -14,28 +14,44 @@ const defaultColors = {
     low: "red"
 }
 
+const defaultThresholds = {
+    high: 50,
+    low : 25
+}
+
+const over = (val) => x => x > val
+const between = (min,max) => x => x > min && x <= max
+const below = (val) => x => x <= val
+
 const getLevelColors = (colors) => mapKeys( key => `--${key}-level`, merge(defaultColors, colors))
 
 const StatusBar = (props) => {
     const { 
         maxLevel = 100, 
         colors = defaultColors,
+        breakpoints = defaultThresholds,
         statusLevel = 100,
         statusName
     } = props;
 
+    const {
+        high, low
+    } = breakpoints
+
+    const statusPercent = statusPercentage(statusLevel, maxLevel)
+
     const barClass = getClassName({
         "bar": true,
-        "bar--high-level": statusPercentage(statusLevel, maxLevel) > 50,
-        "bar--half-level": statusPercentage(statusLevel, maxLevel) <= 50,
-        "bar--low-level": statusPercentage(statusLevel, maxLevel) <= 25
+        "bar--high-level": over(high)(statusPercent),
+        "bar--half-level": between(low,high)(statusPercent),
+        "bar--low-level":  below(low)(statusPercent)
     });
 
     return (
         <div className="barContainer">
             <span className="statusName">{statusName}</span>
             <div className={barClass} style={getLevelColors(colors)}>
-                <div style={{width: `${statusPercentage(statusLevel, maxLevel)}%`}}></div>
+                <div className="inner-bar" style={{width: `${statusPercentage(statusLevel, maxLevel)}%`}}></div>
             </div>
             <span>{statusLevel}/{maxLevel}</span>
         </div>
@@ -48,6 +64,16 @@ export const Oxygen = {
 
 export const Water = {
     high: "#1A67EE" 
+}
+
+export const Stamina = {
+    high: "orange"
+}
+
+export const Colors = {
+    OXYGEN: Oxygen, 
+    WATER: Water,
+    STAMINA: Stamina
 }
 
 export default StatusBar;
