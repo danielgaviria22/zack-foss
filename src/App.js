@@ -9,12 +9,16 @@ import { loadState } from 'redux/load';
 import { startTimer, stopTimer } from 'redux/timer';
 import { resetState } from 'redux/reset';
 import Spinner from 'components/Spinner';
+import Monitor from 'containers/Monitor';
 import "App.scss"
+import Storage from 'core/middleware/storage';
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadState())
+    dispatch(startTimer())
   },[dispatch])
 
   const base = getClassName({
@@ -30,11 +34,13 @@ function App() {
   console.groupEnd()
   window["startTimer"] = compose( dispatch, startTimer );
   window["stopTimer"] = compose( dispatch, stopTimer );
-  window["reset"] = compose( dispatch, resetState )
+  window["reset"] = compose( dispatch, resetState );
+  window["hardReset"] = () => Storage.delete();
 
   return (
     <div className={base}>
       <Suspense fallback={<Spinner />}>
+        <Monitor />
         <main className={mainContainer}>
           <CharacterView />
         </main>

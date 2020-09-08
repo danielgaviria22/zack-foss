@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { getClassName } from 'core/utils/css-class'
-import { Effects } from 'redux/status/constants';
+import { Effects } from 'core/constants';
 import { propOr, __ } from 'ramda';
 
 import AsphyxiaIcon from './icons/asphyxia.svg';

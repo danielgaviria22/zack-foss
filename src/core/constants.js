@@ -16,7 +16,8 @@ export const Status = {
 
 export const Flags = {
     AutoBreathe: "AutoBreathe",
-    AutoBreatheUnlocked: "AutoBreatheUnlocked"
+    AutoBreatheUnlocked: "AutoBreatheUnlocked",
+    Started: "Started"
 }
 
 export const Counters = {

@@ -1,4 +1,4 @@
-import { Status } from "redux/status/constants";
+import { Status } from "core/constants";
 import { Colors } from "components/StatusBar";
 import { prop } from "ramda";
 

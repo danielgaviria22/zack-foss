@@ -9,7 +9,7 @@ import { fromActions } from 'core/utils/redux-utils'
 import Storage from 'core/middleware/storage'
 import { dotPathOr, dotPathOrFrom } from 'core/utils/functions'
 import { loadLog } from 'redux/actionLog'
-import { LOAD, INJECT, loadState, injectionError } from '.'
+import { LOAD, INJECT, loadState, injectionError, loaded } from '.'
 import { initialState } from 'initialState'
 import { loadCounters } from 'redux/counters'
 
@@ -36,6 +36,7 @@ export const loadEpic = action$ => action$.pipe(
             compose( loadInventory, getInventory ),
             compose( loadLog, getActionLog ),
             compose( loadCounters, getCounters ),
+            loaded
         )
     )
 )

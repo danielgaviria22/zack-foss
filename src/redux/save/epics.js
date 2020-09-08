@@ -1,6 +1,6 @@
 import { ofType } from "redux-observable";
 import { map, withLatestFrom, debounceTime, filter as filterActions } from 'rxjs/operators'
-import { nth, compose, evolve, filter, takeLast, toPairs, fromPairs } from "ramda"
+import { nth, compose, evolve, filter, takeLast, toPairs, fromPairs, omit } from "ramda"
 import Storage from 'core/middleware/storage';
 import { TRIGGER_FLAG } from 'redux/flags';
 import { TRIGGER_STATUS_EFFECT, CHANGE_STATUS_STATS, CHANGE_INVENTORY, CHANGE_STATUS_EFFECT } from 'redux/status';
@@ -10,15 +10,17 @@ import { SET_COUNTER, DEC_COUNTER, INC_COUNTER } from "redux/counters";
 
 const removeFalsyProps = compose(fromPairs, filter(nth(1)) ,toPairs)
 
-const prepareState = compose((state) => {
-    return evolve({
+const prepareState = compose(
+    omit(["ready"]),
+    (state) => evolve({
         actionLog: (msgs) => takeLast(20)(filter(x => !x.temporal,msgs)),
         counters: removeFalsyProps,
         character: {
             effects: removeFalsyProps
         },
-    })(state)
-}, nth(1))
+    })(state), 
+    nth(1)
+)
 
 export const saveEpic = (action$, state$) => action$.pipe(
     ofType(

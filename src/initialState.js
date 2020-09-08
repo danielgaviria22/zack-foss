@@ -1,4 +1,5 @@
 export const initialState = {
+    ready: false,
     resources: {},
     flags: {},
     actionLog: [],
@@ -6,13 +7,13 @@ export const initialState = {
     character: {
         effects: {},
         stats: {
-            OXYGEN: 100,
+            OXYGEN: 0,
             MAX_OXYGEN: 100,
-            HP: 100,
+            HP: 30,
             MAX_HP: 100,
-            STAMINA: 100,
+            STAMINA: 50,
             MAX_STAMINA: 100,
-            WATER: 100,
+            WATER: 50,
             MAX_WATER: 100,
         },
         inventory: []
