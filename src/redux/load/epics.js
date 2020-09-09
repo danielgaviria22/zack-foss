@@ -1,4 +1,4 @@
-import { mergeMap , map } from 'rxjs/operators'
+import { mergeMap , map, filter } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 import { compose, always, __ } from 'ramda'
 import { loadResources } from 'redux/resources'
@@ -12,6 +12,9 @@ import { loadLog } from 'redux/actionLog'
 import { LOAD, INJECT, loadState, injectionError, loaded } from '.'
 import { initialState } from 'initialState'
 import { loadCounters } from 'redux/counters'
+import Session from 'core/middleware/session'
+import { makeMain, makeSecondary } from 'redux/main'
+import { stopTimer, startTimer } from 'redux/timer'
 
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
@@ -26,16 +29,28 @@ const getCounters = pathOrEmptyObject("counters",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
+    map(() => Session().register(
+        (store,skip) => {
+            store.dispatch(makeMain())
+            !skip && store.dispatch(loadState())
+            store.dispatch(startTimer())
+        },
+        store => {
+            store.dispatch(makeSecondary())
+            store.dispatch(stopTimer())
+        }
+    )),
+    filter(() => Session().isMain() ),
     map(() => Storage.load().onError(always({}))),
     mergeMap(
         fromActions(
-            compose( loadFlags, getFlags ),
+            compose( loadFlags    , getFlags     ),
             compose( loadResources, getResources ),
-            compose( loadStats, getStats ),
-            compose( loadEffects, getEffects ),
+            compose( loadStats    , getStats     ),
+            compose( loadEffects  , getEffects   ),
             compose( loadInventory, getInventory ),
-            compose( loadLog, getActionLog ),
-            compose( loadCounters, getCounters ),
+            compose( loadLog      , getActionLog ),
+            compose( loadCounters , getCounters  ),
             loaded
         )
     )

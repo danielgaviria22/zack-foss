@@ -17,9 +17,20 @@ export const Status = {
 export const Flags = {
     AutoBreathe: "AutoBreathe",
     AutoBreatheUnlocked: "AutoBreatheUnlocked",
-    Started: "Started"
+    TravelUnlocked: "TravelUnlocked",
+    Started: "Started",
 }
 
 export const Counters = {
     Breaths: "Breaths"
+}
+
+export const Locations = {
+    StartingCave: "StartingCave",
+    City: "city",
+    Forest: "forest",
+    Foundry: "foundry",
+    Home: "home",
+    Library: "library",
+    Shop: "shop",
 }

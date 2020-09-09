@@ -5,12 +5,16 @@ import statusReducer from 'redux/status'
 import actionLogReducer from 'redux/actionLog'
 import countersReducer from 'redux/counters'
 import loadReducer from 'redux/load'
+import locationReducer from 'redux/location'
+import sessionReducer from 'redux/main'
 
 export const rootReducer = combineReducers({
     ready: loadReducer,
+    main: sessionReducer,
     resources: resourceReducer,
     flags: flagReducer,
     character: statusReducer,
     actionLog: actionLogReducer,
     counters: countersReducer,
+    location: locationReducer,
 })

@@ -20,9 +20,7 @@ const Breathe = (props) => {
     const handleBreath = () => {
         dispatch(changeStat(Status.Oxygen,10));
         dispatch(addTemporalLine(t("startingPoint.clickBreatheButton")))
-        if( !AutoBreatheUnlocked ){
-            dispatch(incCounter(Counters.Breaths));
-        }
+        dispatch(incCounter(Counters.Breaths));
     }
 
     const toggleAutoBreath = () => {

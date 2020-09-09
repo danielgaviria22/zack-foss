@@ -4,6 +4,8 @@ export const initialState = {
     flags: {},
     actionLog: [],
     counters: {},
+    main: false,
+    location: "StartingCave",
     character: {
         effects: {},
         stats: {
