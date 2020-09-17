@@ -126,3 +126,6 @@ export const useInventory = () => {
     );
 }
 
+export const useLocation = () => {
+    return useSelector(prop("location"));
+}

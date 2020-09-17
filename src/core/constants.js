@@ -1,6 +1,7 @@
 export const Effects = {
     Asphyxia: "Asphyxia",
-    Dizzy: "Dizzy"
+    Dizzy: "Dizzy",
+    Hunger: "Hunger"
 }
 
 export const Status = {
@@ -19,6 +20,9 @@ export const Flags = {
     AutoBreatheUnlocked: "AutoBreatheUnlocked",
     TravelUnlocked: "TravelUnlocked",
     Started: "Started",
+    Suitcase: "Suitcase",
+    SuspiciousVendor: "SuspiciousVendor",
+    Hunger: "Hunger",
 }
 
 export const Counters = {
@@ -26,11 +30,20 @@ export const Counters = {
 }
 
 export const Locations = {
-    StartingCave: "StartingCave",
     City: "city",
     Forest: "forest",
     Foundry: "foundry",
     Home: "home",
     Library: "library",
     Shop: "shop",
+}
+
+export const Items = {
+    GP: "GP"
+}
+
+export const CityEvents = {
+    Suitcase: "suitcase",
+    SuspiciousVendor: "suspiciousVendor",
+    Hunger: "hunger",
 }

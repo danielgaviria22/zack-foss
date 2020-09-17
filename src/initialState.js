@@ -5,7 +5,7 @@ export const initialState = {
     actionLog: [],
     counters: {},
     main: false,
-    location: "StartingCave",
+    location: "home",
     character: {
         effects: {},
         stats: {

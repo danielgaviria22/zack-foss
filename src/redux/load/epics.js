@@ -15,6 +15,7 @@ import { loadCounters } from 'redux/counters'
 import Session from 'core/middleware/session'
 import { makeMain, makeSecondary } from 'redux/main'
 import { stopTimer, startTimer } from 'redux/timer'
+import { loadLocation } from 'redux/location'
 
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
@@ -26,6 +27,7 @@ const getEffects = pathOrEmptyObject("character.effects",__)
 const getInventory = pathOrEmptyArray("character.inventory",__)
 const getActionLog = pathOrEmptyArray("actionLog",__)
 const getCounters = pathOrEmptyObject("counters",__)
+const getLocation = pathOrInitialStatePath("location",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
@@ -51,6 +53,7 @@ export const loadEpic = action$ => action$.pipe(
             compose( loadInventory, getInventory ),
             compose( loadLog      , getActionLog ),
             compose( loadCounters , getCounters  ),
+            compose( loadLocation , getLocation  ),
             loaded
         )
     )

@@ -39,6 +39,7 @@ function App() {
   window["tick"] = compose( dispatch, tick)
   window["reset"] = compose( dispatch, resetState );
   window["hardReset"] = () => {
+    dispatch(stopTimer())
     Storage.delete();
     Session().clean();
   }

@@ -1,28 +1,33 @@
-import { dotPath } from 'core/utils/functions'
+import { dotPath, randomInteger } from 'core/utils/functions'
 import { Maybe } from '@juan-utils/ramda-structures';
-import { changeStat } from 'redux/status';
-import { Counters, Flags, Status } from 'core/constants';
+import { prop } from 'ramda';
+import { changeStat, triggerEffect } from 'redux/status';
+import { Counters, Flags, Status, Effects, CityEvents, Locations } from 'core/constants';
 import { triggerFlag } from 'redux/flags';
 import { addFixedLine } from 'redux/actionLog';
 import i18n from  "../../i18n"
 
+const getLocation = prop("location")
 const getCounter = (counter,state) => dotPath(`counters.${counter}`,state)
 const getFlag = (flag,state) => dotPath(`flags.${flag}`,state)
 const getStat = (stat,state) => dotPath(`character.stats.${stat}`,state)
-// const getEffect = (effect,state) => dotPath(`character.effects.${effect}`,state)
+const getEffect = (effect,state) => dotPath(`character.effects.${effect}`,state)
+const anyFlags = (...flags) => (state) => flags.map(flag => getFlag(flag,state)).some(x => x);
+const getStatTuple = (stat,state) => [ stat, `MAX_${stat}`].map(x => getStat(x,state))
+const isStatMaxed = (stat,state) => getStatTuple(stat,state).reduce((x,y) => x === y)
 
 export const checkOxygen = (state) => {
-    let actions = []
     const AutoBreathe = getFlag(Flags.AutoBreathe,state);
     const Oxygen = getStat(Status.Oxygen,state)
-    actions.push(changeStat(Status.Oxygen,-1))
-    if( AutoBreathe ){
-        actions.push(changeStat(Status.Oxygen,2))
-    }
-    if( !Oxygen ){
-        actions.push(changeStat(Status.HP,-1))
-    }
-    return Maybe.fromArray(actions)
+    const Asphyxia = getEffect(Effects.Asphyxia,state)
+    const isOxygenStill = isStatMaxed(Status.Oxygen,state) && AutoBreathe
+    const oxygenChange =  isOxygenStill ? [] : [changeStat(Status.Oxygen, -1 + (AutoBreathe ? 2 : 0))]
+    const maybeDamage  = Maybe.from(!Oxygen)
+                            .map(() => changeStat(Status.HP,-1))
+                            .map(act => Asphyxia ? act : [act,triggerEffect(Effects.Asphyxia)])
+    const maybeRemoveEffect = Maybe.from(maybeDamage.isNone() && Asphyxia)
+                            .map(() => triggerEffect(Effects.Asphyxia))
+    return Maybe.from(oxygenChange).concat(maybeDamage).concat(maybeRemoveEffect)
 }
 
 export const checkAutoBreathUnlock = (state) => {
@@ -40,9 +45,43 @@ export const checkTravelUnlock = (state) => {
     const breaths = getCounter(Counters.Breaths,state);
     const unlocked = getFlag(Flags.TravelUnlocked,state)
     return Maybe.from(!unlocked && breaths >= 5)
-                .chain(() => Maybe.from(Math.floor(Math.random() * 10) === 7))
+                .chain(() => Maybe.from(randomInteger(0,10) === 7))
                 .map(() => [
                     triggerFlag(Flags.TravelUnlocked),
                     addFixedLine(i18n.t("location:startingPoint.chooseDestination"))
                 ])
+}
+
+export const checkCityEvents = (state) => {
+    const isInCity = getLocation(state) === Locations.City
+    const isCityEventActive = anyFlags(
+        Flags.Hunger,
+        Flags.SuspiciousVendor,
+        Flags.Suitcase
+    )(state)
+
+    const getRandomCityEvent = () => {
+        switch(randomInteger(0,3)) {
+            case 0 :
+                return [ CityEvents.Hunger, [
+                    triggerFlag(Flags.Hunger),
+                    triggerEffect(Effects.Hunger),
+                ]]
+            case 1 :
+                return [ CityEvents.Suitcase, [ triggerFlag(Flags.Suitcase) ]]
+            case 2 :
+                return [CityEvents.SuspiciousVendor ,[ triggerFlag(Flags.SuspiciousVendor) ]]
+            default:
+                return ["NoEvent",[]]
+        }
+    }
+
+    return Maybe.from(isInCity && !isCityEventActive)
+        .chain(() => Maybe.from(randomInteger(0,50) === 25))
+        .effect(() => console.group("TO DO: Remove effects"))
+        .effect(() => console.log("Event is happening get ready!"))
+        .map(getRandomCityEvent)
+        .effect(([evt]) => console.log(`Chosen event:`,evt))
+        .effect(() => console.groupEnd())
+        .map(([ evt, acts ]) => [ ...acts, addFixedLine(i18n.t(`location:city.randomEvents.${evt}.find`))])
 }

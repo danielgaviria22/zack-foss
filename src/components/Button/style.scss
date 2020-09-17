@@ -4,6 +4,7 @@
     color: black;
     height: 60px;
     min-width: 150px;
+    width: fit-content;
     border-radius: 20px;
     border: none;
     font-size: 16px;
@@ -45,5 +46,13 @@
         & .loading-block {
             opacity: 0.5;
         }
+    }
+
+    &--fluid {
+        width: 100%;
+    }
+
+    &--shy {
+        margin-top: 16px;
     }
 }

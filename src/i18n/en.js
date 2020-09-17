@@ -4,7 +4,12 @@ export default {
         OXYGEN: "Oxygen",
         STAMINA: "Stamina",
         WATER: "Water"
-    },
+	},
+	items: {
+		drill: "Drill",
+		pickaxe: "Pickaxe",
+		GP: "GP"
+	},
     location: 
 	{
 		conectors: {
@@ -33,7 +38,7 @@ export default {
 		},
 		city:
 		{
-			arrivalRandomPromts: {
+			arrivalRandomPrompts: {
 				0: "The city is agitated today, what will you do?",
 				1: "The city is calm today, what will you do?",
 				2: "The city is pretty lonely today, what will you do?",
@@ -42,11 +47,11 @@ export default {
 			{
 				gym: {
 					option: "Go to the Gym",
-					result: "You feel stronger but get dehidrated"
+					message: "You feel stronger but get dehidrated"
 				},
 				work: {
-					message: "Go to work",
-					result: "You earn some money but feel tired"
+					option: "Go to work",
+					message: "You earn some money but feel tired"
 				}
 			},
 			randomEvents:
@@ -66,16 +71,8 @@ export default {
                     lookAtWares: "You take a look at his wares",
                     buyMessage: "You bought a {{item}}",
                     leave: "You leave the vendor and his wares behind",
-                    kill: "This branch is under construction",
-                    items: {
-                        drill: "Drill",
-                        pickaxe: "Pickaxe"
-                    },
-                    currency: {
-                        name: "GP",
-                        abbreviation: "GP",
-                        amount: "{{amount}} $t(city.randomEvents.suspiciousVendor.currency.abbreviation)"
-                    },
+					kill: "This branch is under construction",
+					amount: "{{amount}} $t(items:GP)"
 				},
 				hunger: {
                     find: "You feel a sudden hunger",

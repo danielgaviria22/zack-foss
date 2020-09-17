@@ -51,6 +51,7 @@ const createSession = () => {
                 this.register(onOff)
                 registered = true;
             }
+            return this
         },
         isMain(){
             return main
@@ -59,6 +60,7 @@ const createSession = () => {
             local.set(MAIN_WINDOW,id)
             main = true
             onMain(store,skipLoad)
+            return this
         },
         unregister(){
             if(main){
@@ -67,10 +69,12 @@ const createSession = () => {
             if( getSession() >= LIMIT ){
                 local.delete(SESSION)
             }
+            return this
         },
         clean(){
             local.delete(SESSION)
             local.delete(MAIN_WINDOW)
+            return this
         },
         debug(){
             console.group("Debug Session")
@@ -78,6 +82,7 @@ const createSession = () => {
             console.log(`Key(${SESSION})`,local.get(SESSION))
             console.log(`Key(${MAIN_WINDOW})`,local.get(MAIN_WINDOW))
             console.groupEnd();
+            return this
         }
     }
 }

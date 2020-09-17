@@ -1,3 +1,4 @@
+const extract = fn => typeof(fn) === "function" ? fn() : fn;
 const makeRegexp = (tok="&") => new RegExp(tok,"gi")
 const preProcess = obj => {
     if(obj.base){
@@ -13,7 +14,7 @@ const preProcess = obj => {
 }
 
 const _getClassName = (obj) => Object.entries(preProcess(obj)).map(([className,pred]) => {
-    const shouldConcat = typeof(pred) === "function" ? pred() : pred;
+    const shouldConcat = extract(pred)
     return shouldConcat ? className : undefined
 }).filter(Boolean).join(" ")
 

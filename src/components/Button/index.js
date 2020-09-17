@@ -7,6 +7,8 @@ const Button = (props) => {
     const { 
         children, 
         disabled, 
+        shy,
+        fluid,
         loadingTime=5,
         onClick=identity, 
         onAnimationEnd=identity,
@@ -17,7 +19,9 @@ const Button = (props) => {
     const baseClass = getClassName({
         "button": true,
         "button--loading": loading,
-        "button--disabled": disabled || loading
+        "button--disabled": disabled || loading,
+        "button--shy": shy,
+        "button--fluid": fluid,
     })
 
     const loadingBlockClass = getClassName({
