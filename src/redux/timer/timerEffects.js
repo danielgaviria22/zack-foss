@@ -5,6 +5,7 @@ import { changeStat, triggerEffect } from 'redux/status';
 import { Counters, Flags, Status, Effects, CityEvents, Locations } from 'core/constants';
 import { triggerFlag } from 'redux/flags';
 import { addFixedLine } from 'redux/actionLog';
+import { reduceCooldown } from 'redux/cooldowns';
 import i18n from  "../../i18n"
 
 const getLocation = prop("location")
@@ -19,15 +20,26 @@ const isStatMaxed = (stat,state) => getStatTuple(stat,state).reduce((x,y) => x =
 export const checkOxygen = (state) => {
     const AutoBreathe = getFlag(Flags.AutoBreathe,state);
     const Oxygen = getStat(Status.Oxygen,state)
+    const HP = getStat(Status.HP,state)
     const Asphyxia = getEffect(Effects.Asphyxia,state)
     const isOxygenStill = isStatMaxed(Status.Oxygen,state) && AutoBreathe
     const oxygenChange =  isOxygenStill ? [] : [changeStat(Status.Oxygen, -1 + (AutoBreathe ? 2 : 0))]
-    const maybeDamage  = Maybe.from(!Oxygen)
+    const maybeDamage  = Maybe.from(HP && !Oxygen)
                             .map(() => changeStat(Status.HP,-1))
                             .map(act => Asphyxia ? act : [act,triggerEffect(Effects.Asphyxia)])
     const maybeRemoveEffect = Maybe.from(maybeDamage.isNone() && Asphyxia)
                             .map(() => triggerEffect(Effects.Asphyxia))
     return Maybe.from(oxygenChange).concat(maybeDamage).concat(maybeRemoveEffect)
+}
+
+export const checkDeath = (state) => {
+    const HP = getStat(Status.HP,state);
+    const Death = getEffect(Effects.Death,state)
+    return Maybe.from(!HP && !Death)
+                .map(() => [
+                    triggerEffect(Effects.Death),
+                    addFixedLine(i18n.t("location:death"))
+                ])
 }
 
 export const checkAutoBreathUnlock = (state) => {
@@ -84,4 +96,8 @@ export const checkCityEvents = (state) => {
         .effect(([evt]) => console.log(`Chosen event:`,evt))
         .effect(() => console.groupEnd())
         .map(([ evt, acts ]) => [ ...acts, addFixedLine(i18n.t(`location:city.randomEvents.${evt}.find`))])
+}
+
+export const reduceCooldowns = (state) => {
+    return Maybe.fromArray(state.cooldowns.map(skill => reduceCooldown(skill.id)))
 }

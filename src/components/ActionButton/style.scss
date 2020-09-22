@@ -1,0 +1,45 @@
+.action-button{
+    font-family: 'Roboto', sans-serif;
+    background-color: skyblue;
+    color: black;
+    height: 60px;
+    min-width: 150px;
+    width: fit-content;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+
+    & .loading-block {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        background-color: gray;
+        height: 100%;
+        width: 100%;
+        transition: all 1s linear;
+    }
+
+
+    &--disabled{
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    &--loading {
+        & .loading-block {
+            opacity: 0.5;
+        }
+    }
+
+    &--fluid {
+        width: 100%;
+    }
+
+    &--shy {
+        margin-top: 16px;
+    }
+}

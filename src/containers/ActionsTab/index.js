@@ -3,9 +3,9 @@ import { Maybe } from '@juan-utils/ramda-structures';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { changeStat } from 'redux/status';
-import Button from 'components/Button';
+import ActionButton from 'components/ActionButton';
 import { getClassName } from 'core/utils/css-class'
-import { Status, Flags, Counters, Locations, Items } from 'core/constants';
+import { Status, Flags, Counters, Locations, Items, Actions } from 'core/constants';
 import { triggerFlag } from 'redux/flags';
 import { useFlag, useLocation, useInventory } from 'core/hooks/state';
 import { incCounter } from 'redux/counters';
@@ -30,7 +30,10 @@ const Breathe = () => {
     }
 
     return <>
-        <Button onClick={handleBreath} loadingTime={2} >Breathe</Button>
+        <ActionButton 
+            action={Actions.Breathe} 
+            onClick={handleBreath}
+        >Breathe</ActionButton>
         {AutoBreatheUnlocked && 
             <div>
             <input 
@@ -74,7 +77,11 @@ const Travel = () => {
             .chain(locs => Maybe.fromPredicate(() => unlocked,locs))
             .map((locs) => 
                 locs.map((context) => {
-                    return <Button key={context} onClick={handleTravel(context)} shy compact>{t("goTo",{ context })}</Button>
+                    return <ActionButton 
+                        action={Actions.Travel}
+                        cooldown={3}
+                        key={context} 
+                        onClick={handleTravel(context)} shy compact>{t("goTo",{ context })}</ActionButton>
                 })
             )
             .onNone(<></>)
@@ -98,8 +105,8 @@ const City = () => {
     }
 
     return <>
-        <Button onClick={handleGym}  shy compact>{t("city.actions.gym.option")}</Button>
-        <Button onClick={handleWork} shy compact>{t("city.actions.work.option")}</Button>
+        <ActionButton action={Actions.Gym} onClick={handleGym} cooldown={8} shy compact>{t("city.actions.gym.option")}</ActionButton>
+        <ActionButton action={Actions.Gym} onClick={handleWork} shy compact>{t("city.actions.work.option")}</ActionButton>
     </>
 }
 

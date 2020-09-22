@@ -1,7 +1,8 @@
 export const Effects = {
     Asphyxia: "Asphyxia",
     Dizzy: "Dizzy",
-    Hunger: "Hunger"
+    Hunger: "Hunger",
+    Death: "Death"
 }
 
 export const Status = {
@@ -46,4 +47,10 @@ export const CityEvents = {
     Suitcase: "suitcase",
     SuspiciousVendor: "suspiciousVendor",
     Hunger: "hunger",
+}
+
+export const Actions = {
+    Breathe: "Breathe",
+    Gym: "Gym",
+    Travel: "Travel"
 }

@@ -3,6 +3,7 @@ import { prop, map } from 'ramda';
 import { dotPathOr, dotPath } from "core/utils/functions";
 import { Inventory } from "core/structures";
 import { changeInventory } from "redux/status";
+import { Maybe } from "@juan-utils/ramda-structures";
 
 export const useAllFlags = () => useSelector(prop("flags"))
 export const useAllResources = () => useSelector(prop("resources"))
@@ -128,4 +129,10 @@ export const useInventory = () => {
 
 export const useLocation = () => {
     return useSelector(prop("location"));
+}
+
+export const useCooldown = (id) => {
+    return useSelector(state => {
+        return Maybe.from(state.cooldowns.find(x => x.id === id)).onNone({ id , amount: 0, loading: false })
+    })
 }

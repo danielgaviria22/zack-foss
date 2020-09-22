@@ -16,6 +16,7 @@ import Session from 'core/middleware/session'
 import { makeMain, makeSecondary } from 'redux/main'
 import { stopTimer, startTimer } from 'redux/timer'
 import { loadLocation } from 'redux/location'
+import { loadCooldowns } from 'redux/cooldowns'
 
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
@@ -28,6 +29,7 @@ const getInventory = pathOrEmptyArray("character.inventory",__)
 const getActionLog = pathOrEmptyArray("actionLog",__)
 const getCounters = pathOrEmptyObject("counters",__)
 const getLocation = pathOrInitialStatePath("location",__)
+const getCooldowns = pathOrEmptyArray("cooldowns",__)
 
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
@@ -43,17 +45,18 @@ export const loadEpic = action$ => action$.pipe(
         }
     )),
     filter(() => Session().isMain() ),
-    map(() => Storage.load().onError(always({}))),
+    map(() => Storage.load().onErr(always({}))),
     mergeMap(
         fromActions(
-            compose( loadFlags    , getFlags     ),
-            compose( loadResources, getResources ),
-            compose( loadStats    , getStats     ),
-            compose( loadEffects  , getEffects   ),
-            compose( loadInventory, getInventory ),
-            compose( loadLog      , getActionLog ),
-            compose( loadCounters , getCounters  ),
-            compose( loadLocation , getLocation  ),
+            compose( loadFlags     , getFlags     ),
+            compose( loadResources , getResources ),
+            compose( loadStats     , getStats     ),
+            compose( loadEffects   , getEffects   ),
+            compose( loadInventory , getInventory ),
+            compose( loadLog       , getActionLog ),
+            compose( loadCounters  , getCounters  ),
+            compose( loadLocation  , getLocation  ),
+            compose( loadCooldowns , getCooldowns ),
             loaded
         )
     )
@@ -63,6 +66,6 @@ export const injectEpic = action$ => action$.pipe(
     ofType(INJECT),
     mergeMap(act => Storage.inject(act.payload)
         .map(fromActions(loadState,communicateSaved))
-        .onError(fromActions(injectionError))
+        .onErr(fromActions(injectionError))
     )
 )

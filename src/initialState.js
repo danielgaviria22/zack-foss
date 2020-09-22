@@ -1,6 +1,7 @@
 export const initialState = {
     ready: false,
     resources: {},
+    cooldowns: [],
     flags: {},
     actionLog: [],
     counters: {},

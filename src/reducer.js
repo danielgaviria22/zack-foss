@@ -7,6 +7,7 @@ import countersReducer from 'redux/counters'
 import loadReducer from 'redux/load'
 import locationReducer from 'redux/location'
 import sessionReducer from 'redux/main'
+import cooldownsReducer from 'redux/cooldowns'
 
 export const rootReducer = combineReducers({
     ready: loadReducer,
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
     actionLog: actionLogReducer,
     counters: countersReducer,
     location: locationReducer,
+    cooldowns: cooldownsReducer
 })

@@ -1,4 +1,7 @@
 export default {
+	actions: {
+		Breathe: "Breathe"
+	},
 	stats: {
         HP: "HP",
         OXYGEN: "Oxygen",
