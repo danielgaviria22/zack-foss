@@ -26,7 +26,7 @@ export const timerEpic = (action$) => action$.pipe(
 // Should return Maybe.None when no changes are required
 /**
  * @template T
- * @typedef {import('@juan-utils/ramda-structures').Maybe<T>} Maybe
+ * @typedef {import('jazzi').Maybe<T>} Maybe
  */
 /** 
  * @typedef {{ type: string, payload?: any}} Action
@@ -41,7 +41,7 @@ const processTick = Object.entries(checks).map(([,fn] )=> fn);
  * @param {Maybe<Action | Action[]>[]} arr
  * @returns {Action[]}
  */
-const unwrapActions = arr => arr.flatMap(m => m.onNone([]))
+const unwrapActions = arr => arr.flatMap(m => m.onNone(() => []))
 
 export const tickEpic = (action$,state$) => action$.pipe(
     ofType(TICK),

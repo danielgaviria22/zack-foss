@@ -1,4 +1,4 @@
-import { Maybe } from '@juan-utils/ramda-structures'
+import { Maybe } from 'jazzi'
 import { F as False, always, prop, sortBy, identity as I, binary } from "ramda"
 import { propNeq } from "core/utils/functions"
 

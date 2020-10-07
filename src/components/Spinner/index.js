@@ -1,5 +1,5 @@
 import React from 'react';
-import { getClassName } from 'core/utils/css-class';
+import getClassName from "getclassname";
 import "./style.scss"
 
 const Spinner = () => {

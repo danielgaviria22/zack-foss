@@ -3,7 +3,7 @@ import { compose, prop } from 'ramda';
 import CharacterView from 'containers/CharacterView';
 import SidebarView from 'containers/SidebarView';
 import ActionLogView from 'containers/ActionLogView';
-import { getClassName } from "core/utils/css-class"
+import getClassName from "getclassname"
 import { useDispatch, useSelector } from 'react-redux';
 import { loadState } from 'redux/load';
 import { startTimer, stopTimer, tick } from 'redux/timer';

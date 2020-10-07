@@ -1,7 +1,7 @@
 import React from "react"
 import ActionLog from "components/ActionLog"
 import { useLogMessages } from "core/hooks/state"
-import { getClassName } from "core/utils/css-class"
+import getClassName from "getclassname"
 import "./style.scss"
 
 const ActionLogView = () => {

@@ -1,5 +1,5 @@
 import store from "../../store";
-import { Maybe } from "@juan-utils/ramda-structures";
+import { Maybe } from "jazzi";
 import { propEq } from "ramda";
 
 const SESSION = "SESSION";

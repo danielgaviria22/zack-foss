@@ -1,6 +1,6 @@
 import React from 'react'
 import { useInventory } from 'core/hooks/state'
-import { getClassName } from 'core/utils/css-class';
+import getClassName from "getclassname";
 import { useTranslation } from 'react-i18next';
 
 const InventoryTab = () => {

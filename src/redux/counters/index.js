@@ -1,6 +1,6 @@
 import { createReducer, nAryActionCreator, loadState, resetState, unaryActionCreator, nullaryActionCreator } from "core/utils/redux-utils"
 import { assoc, gte, __ } from "ramda";
-import { Result } from "@juan-utils/ramda-structures";
+import { Result } from "jazzi";
 
 export const SET_COUNTER = "zack-foss/set-counter"
 export const INC_COUNTER = "zack-foss/inc-counter"

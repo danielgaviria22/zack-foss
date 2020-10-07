@@ -2,7 +2,7 @@ import { ofType } from "redux-observable";
 import { map, filter } from 'rxjs/operators'
 import { CHANGE_LOCATION } from ".";
 import { Locations } from "core/constants";
-import { Maybe } from "@juan-utils/ramda-structures";
+import { Maybe } from "jazzi";
 import { addTemporalLine } from "redux/actionLog";
 import i18n from "../../i18n";
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getClassName } from 'core/utils/css-class'
+import getClassName from "getclassname"
 import { identity } from 'ramda';
 import "./style.scss"
 

@@ -1,10 +1,10 @@
 import React from 'react'
-import { Maybe } from '@juan-utils/ramda-structures';
+import { Maybe } from 'jazzi';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { changeStat } from 'redux/status';
 import ActionButton from 'components/ActionButton';
-import { getClassName } from 'core/utils/css-class'
+import getClassName from "getclassname"
 import { Status, Flags, Counters, Locations, Items, Actions } from 'core/constants';
 import { triggerFlag } from 'redux/flags';
 import { useFlag, useLocation, useInventory } from 'core/hooks/state';
@@ -95,6 +95,8 @@ const City = () => {
     const { t } = useTranslation("location");
 
     const handleGym = () => {
+        dispatch(changeStat(Status.Stamina,10))
+        dispatch(changeStat(Status.Water,-10))
         dispatch(addTemporalLine(t("city.actions.gym.message")))
     }
     

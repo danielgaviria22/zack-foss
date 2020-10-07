@@ -1,5 +1,5 @@
 import React from 'react'
-import { getClassName } from 'core/utils/css-class'
+import getClassName from "getclassname"
 import { identity } from 'ramda';
 import { useCooldown } from 'core/hooks/state';
 import { useDispatch } from 'react-redux';

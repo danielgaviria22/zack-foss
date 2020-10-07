@@ -1,7 +1,7 @@
 import React from 'react'
 import { merge } from 'ramda';
 import { mapKeys } from 'core/utils/functions';
-import { getClassName } from 'core/utils/css-class'
+import getClassName from "getclassname"
 import "./style.scss"
 
 const statusPercentage = (level, max) => {

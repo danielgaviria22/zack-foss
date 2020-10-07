@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { head } from 'ramda'
-import { getClassName } from "core/utils/css-class"
+import getClassName from "getclassname"
 import InventoryTab from "containers/InventoryTab"
 import "./index.scss"
 import ActionsTab from "containers/ActionsTab"

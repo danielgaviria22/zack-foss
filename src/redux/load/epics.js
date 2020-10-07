@@ -1,6 +1,6 @@
 import { mergeMap , map, filter } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
-import { compose, always, __ } from 'ramda'
+import { compose, always } from 'ramda'
 import { loadResources } from 'redux/resources'
 import { loadFlags } from 'redux/flags'
 import { loadEffects, loadStats, loadInventory } from 'redux/status'
@@ -21,16 +21,19 @@ import { loadCooldowns } from 'redux/cooldowns'
 const pathOrEmptyObject = dotPathOr({})
 const pathOrEmptyArray = dotPathOr([])
 const pathOrInitialStatePath = dotPathOrFrom(initialState)
-const getResources = pathOrEmptyObject("resources",__)
-const getFlags = pathOrEmptyObject("flags",__)
-const getStats = pathOrInitialStatePath("character.stats",__)
-const getEffects = pathOrEmptyObject("character.effects",__)
-const getInventory = pathOrEmptyArray("character.inventory",__)
-const getActionLog = pathOrEmptyArray("actionLog",__)
-const getCounters = pathOrEmptyObject("counters",__)
-const getLocation = pathOrInitialStatePath("location",__)
-const getCooldowns = pathOrEmptyArray("cooldowns",__)
+const getResources = pathOrEmptyObject("resources")
+const getFlags = pathOrEmptyObject("flags")
+const getStats = pathOrInitialStatePath("character.stats")
+const getEffects = pathOrEmptyObject("character.effects")
+const getInventory = pathOrEmptyArray("character.inventory")
+const getActionLog = pathOrEmptyArray("actionLog")
+const getCounters = pathOrEmptyObject("counters")
+const getLocation = pathOrInitialStatePath("location")
+const getCooldowns = pathOrEmptyArray("cooldowns")
 
+/**
+ * Load state from localStorage
+ */
 export const loadEpic = action$ => action$.pipe(
     ofType(LOAD),
     map(() => Session().register(
@@ -62,6 +65,9 @@ export const loadEpic = action$ => action$.pipe(
     )
 )
 
+/**
+ * Loading state from user input. Not in use.
+ */
 export const injectEpic = action$ => action$.pipe(
     ofType(INJECT),
     mergeMap(act => Storage.inject(act.payload)

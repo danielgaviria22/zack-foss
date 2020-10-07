@@ -1,5 +1,5 @@
 import React from "react"
-import { getClassName } from "core/utils/css-class"
+import getClassName from "getclassname"
 import StatusBars from "containers/StatusBars"
 import EffectIcons from "containers/EffectIcons"
 import "./style.scss"

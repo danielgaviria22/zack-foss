@@ -1,5 +1,5 @@
 import { dotPath, randomInteger } from 'core/utils/functions'
-import { Maybe } from '@juan-utils/ramda-structures';
+import { Maybe } from 'jazzi';
 import { prop } from 'ramda';
 import { changeStat, triggerEffect } from 'redux/status';
 import { Counters, Flags, Status, Effects, CityEvents, Locations } from 'core/constants';
@@ -26,9 +26,9 @@ export const checkOxygen = (state) => {
     const oxygenChange =  isOxygenStill ? [] : [changeStat(Status.Oxygen, -1 + (AutoBreathe ? 2 : 0))]
     const maybeDamage  = Maybe.from(HP && !Oxygen)
                             .map(() => changeStat(Status.HP,-1))
-                            .map(act => Asphyxia ? act : [act,triggerEffect(Effects.Asphyxia)])
+                            .map(act => Asphyxia ? [act] : [act,triggerEffect(Effects.Asphyxia)])
     const maybeRemoveEffect = Maybe.from(maybeDamage.isNone() && Asphyxia)
-                            .map(() => triggerEffect(Effects.Asphyxia))
+                            .map(() => [triggerEffect(Effects.Asphyxia)])
     return Maybe.from(oxygenChange).concat(maybeDamage).concat(maybeRemoveEffect)
 }
 
@@ -64,6 +64,10 @@ export const checkTravelUnlock = (state) => {
                 ])
 }
 
+/**
+ * @typedef {{ type: string, payload?: any}} Action
+ * @returns {Maybe<Action[]>}
+ */
 export const checkCityEvents = (state) => {
     const isInCity = getLocation(state) === Locations.City
     const isCityEventActive = anyFlags(
@@ -71,8 +75,12 @@ export const checkCityEvents = (state) => {
         Flags.SuspiciousVendor,
         Flags.Suitcase
     )(state)
-
+    
+    /**
+     * @returns {[ string, Action[] ]}
+     */
     const getRandomCityEvent = () => {
+        /* eslint-disable default-case */
         switch(randomInteger(0,3)) {
             case 0 :
                 return [ CityEvents.Hunger, [
@@ -82,9 +90,7 @@ export const checkCityEvents = (state) => {
             case 1 :
                 return [ CityEvents.Suitcase, [ triggerFlag(Flags.Suitcase) ]]
             case 2 :
-                return [CityEvents.SuspiciousVendor ,[ triggerFlag(Flags.SuspiciousVendor) ]]
-            default:
-                return ["NoEvent",[]]
+                return [ CityEvents.SuspiciousVendor ,[ triggerFlag(Flags.SuspiciousVendor) ]]
         }
     }
 
@@ -98,6 +104,9 @@ export const checkCityEvents = (state) => {
         .map(([ evt, acts ]) => [ ...acts, addFixedLine(i18n.t(`location:city.randomEvents.${evt}.find`))])
 }
 
+/**
+ * @returns {Maybe<Action[]>}
+ */
 export const reduceCooldowns = (state) => {
     return Maybe.fromArray(state.cooldowns.map(skill => reduceCooldown(skill.id)))
 }
