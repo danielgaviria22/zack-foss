@@ -1,4 +1,4 @@
-import { dotPath, randomInteger } from 'core/utils/functions'
+import { dotPath, getRandomInteger, maybeEquals } from 'core/utils/functions'
 import { Maybe, Reader } from 'jazzi';
 import { prop } from 'ramda';
 import { changeStat, triggerEffect } from 'redux/status';
@@ -7,6 +7,8 @@ import { triggerFlag } from 'redux/flags';
 import { addFixedLine } from 'redux/actionLog';
 import { reduceCooldown } from 'redux/cooldowns';
 import i18n from  "../../i18n"
+
+const maybeDo = (min,max,trigger) => getRandomInteger(min,max).map(maybeEquals(trigger)).run()
 
 const stateReader = Reader.of( state => ({
     getLocation: () => prop("location",state),
@@ -60,7 +62,7 @@ const checkTravelUnlock = stateReader.map(({ getCounter, getFlag }) => {
     const breaths = getCounter(Counters.Breaths);
     const unlocked = getFlag(Flags.TravelUnlocked)
     return Maybe.from(!unlocked && breaths >= 5)
-                .chain(() => Maybe.from(randomInteger(0,10) === 7))
+                .chain(() => maybeDo(0,10,7))
                 .map(() => [
                     triggerFlag(Flags.TravelUnlocked),
                     addFixedLine(i18n.t("location:startingPoint.chooseDestination"))
@@ -74,24 +76,22 @@ const checkCityEvents = stateReader.map(({ getLocation, anyFlags }) => {
         Flags.SuspiciousVendor,
         Flags.Suitcase
     )
-    
-    const getRandomCityEvent = () => {
-        switch(randomInteger(0,3)) {
-            case 0 :
-                return [ CityEvents.Hunger, [
-                    triggerFlag(Flags.Hunger),
-                    triggerEffect(Effects.Hunger),
-                ]]
-            case 1 :
-                return [ CityEvents.Suitcase, [ triggerFlag(Flags.Suitcase) ]]
-            case 2 :
-            default:
-                return [ CityEvents.SuspiciousVendor ,[ triggerFlag(Flags.SuspiciousVendor) ]]
-        }
-    }
+
+    const possibleEvents = [
+        [CityEvents.Hunger, [
+            triggerFlag(Flags.Hunger),
+            triggerEffect(Effects.Hunger),
+        ]],
+        [CityEvents.Suitcase, [ triggerFlag(Flags.Suitcase) ]],
+        [CityEvents.SuspiciousVendor, [ triggerFlag(Flags.SuspiciousVendor) ]]
+    ]
+
+    const getRandomCityEvent = () => getRandomInteger(0,3)
+        .map(i => prop(i,possibleEvents))
+        .run()
 
     return Maybe.from(isInCity && !isCityEventActive)
-        .chain(() => Maybe.from(randomInteger(0,50) === 25))
+        .chain(() => maybeDo(0,50,25))
         .map(getRandomCityEvent)
         .map(([ evt, acts ]) => [ ...acts, addFixedLine(i18n.t(`location:city.randomEvents.${evt}.find`))])
 })
