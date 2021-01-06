@@ -113,7 +113,7 @@ const calculateActions = Reader.do(function*(){
         travelUnlock, cityEvents, cooldowns
     ];
 
-    return Maybe.accumulate(maybeActions).get();
+    return Reader.pure(Maybe.accumulate(maybeActions).get());
 })
 
 export default calculateActions;

@@ -14,8 +14,6 @@ import Storage from 'core/middleware/storage';
 import Session from 'core/middleware/session';
 import SessionMonitor from 'containers/SessionMonitor';
 import "App.scss"
-import { getRandomInteger } from './core/utils/functions';
-import { Maybe } from 'jazzi';
 
 function App() {
   const isMain = useSelector(prop("main"));
@@ -36,8 +34,6 @@ function App() {
   console.groupCollapsed("TO DO: Remove window functions")
   console.error("App.js")
   console.groupEnd()
-  window["random"] = getRandomInteger
-  window["Maybe"] = Maybe
   window["startTimer"] = compose( dispatch, startTimer );
   window["stopTimer"] = compose( dispatch, stopTimer );
   window["tick"] = compose( dispatch, tick)
