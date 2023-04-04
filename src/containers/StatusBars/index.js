@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStat } from 'core/hooks/state'
-import { getClassName } from 'core/utils/css-class';
+import getClassName from "getclassname";
 import StatusBar from 'components/StatusBar';
 import { Stats } from './constants'
 import { useTranslation } from 'react-i18next';

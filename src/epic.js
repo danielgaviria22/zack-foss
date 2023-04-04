@@ -4,6 +4,7 @@ import { loadEpic, injectEpic } from 'redux/load/epics'
 import { resourceEpic } from 'redux/resources/epics'
 import { resetEpic } from 'redux/reset/epics'
 import { timerEpic, tickEpic } from 'redux/timer/epics'
+import { travelEpic } from 'redux/location/epics'
 
 export const rootEpic = combineEpics(
     resourceEpic,
@@ -12,5 +13,6 @@ export const rootEpic = combineEpics(
     resetEpic,
     injectEpic,
     timerEpic,
-    tickEpic
+    tickEpic,
+    travelEpic
 );

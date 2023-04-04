@@ -1,38 +1,119 @@
-import { dotPath } from 'core/utils/functions'
-import { Maybe } from '@juan-utils/ramda-structures';
-import { changeStat } from 'redux/status';
-import { Counters, Flags, Status } from 'core/constants';
+import { dotPath, getRandomInteger, maybeEquals } from 'core/utils/functions'
+import { Maybe, Reader } from 'jazzi';
+import { prop } from 'ramda';
+import { changeStat, triggerEffect } from 'redux/status';
+import { Counters, Flags, Status, Effects, CityEvents, Locations } from 'core/constants';
 import { triggerFlag } from 'redux/flags';
 import { addFixedLine } from 'redux/actionLog';
+import { reduceCooldown } from 'redux/cooldowns';
 import i18n from  "../../i18n"
 
-const getCounter = (counter,state) => dotPath(`counters.${counter}`,state)
-const getFlag = (flag,state) => dotPath(`flags.${flag}`,state)
-// const getEffect = (effect,state) => dotPath(`character.effects.${effect}`,state)
-const getStat = (stat,state) => dotPath(`character.stats.${stat}`,state)
+const maybeDo = (min,max,trigger) => getRandomInteger(min,max).map(maybeEquals(trigger)).run()
 
-export const checkOxygen = (state) => {
-    let actions = []
-    const AutoBreathe = getFlag(Flags.AutoBreathe,state);
-    const Oxygen = getStat(Status.Oxygen,state)
-    actions.push(changeStat(Status.Oxygen,-1))
-    if( AutoBreathe ){
-        actions.push(changeStat(Status.Oxygen,2))
-    }
-    if( !Oxygen ){
-        actions.push(changeStat(Status.HP,-1))
-    }
-    return Maybe.fromArray(actions)
-}
+const stateReader = Reader.of( state => ({
+    getLocation: () => prop("location",state),
+    getCounter: (counter) =>  dotPath(`counters.${counter}`,state),
+    getFlag: (flag) =>  dotPath(`flags.${flag}`,state),
+    getStat: (stat) => dotPath(`character.stats.${stat}`,state),
+    getEffect: (effect) => dotPath(`character.effects.${effect}`,state),
+    anyFlags: (...flags) => flags.map(flag => dotPath(`flags.${flag}`,state)).some(x => x),
+    getStatTuple: (stat) => [ stat, `MAX_${stat}`].map(x => dotPath(`character.stats.${x}`,state)),
+    isStatMaxed : (stat) => [ stat, `MAX_${stat}`].map(x => dotPath(`character.stats.${x}`,state)).reduce((x,y) => x === y),
+    getCooldowns: () => prop("cooldowns",state) || []
+}))
 
-export const checkAutoBreathUnlock = (state) => {
-    const unlocked = getFlag(Flags.AutoBreatheUnlocked,state);
-    if( !unlocked ){
-        const breaths = getCounter(Counters.Breaths,state);
-        const action = triggerFlag(Flags.AutoBreatheUnlocked)
-        const addMsgAction = act => [act, addFixedLine(i18n.t("location:startingPoint.autoBreatheOn"))]
-        return Maybe.fromPredicate(() => breaths >= 3, action)
-                    .map(addMsgAction)
-    }
-    return Maybe.None()
-}
+const checkOxygen = stateReader.map(({ getFlag, getStat, getEffect, isStatMaxed }) => {
+    const AutoBreathe = getFlag(Flags.AutoBreathe);
+    const Oxygen = getStat(Status.Oxygen)
+    const HP = getStat(Status.HP)
+    const Asphyxia = getEffect(Effects.Asphyxia)
+    const isOxygenStill = isStatMaxed(Status.Oxygen) && AutoBreathe
+    const oxygenChange =  isOxygenStill ? [] : [changeStat(Status.Oxygen, -1 + (AutoBreathe ? 2 : 0))]
+    const maybeDamage  = Maybe.from(HP && !Oxygen)
+                            .map(() => changeStat(Status.HP,-1))
+                            .map(act => Asphyxia ? [act] : [act,triggerEffect(Effects.Asphyxia)])
+    const maybeRemoveEffect = Maybe.from(maybeDamage.isNone() && Asphyxia)
+                            .map(() => [triggerEffect(Effects.Asphyxia)])
+    return Maybe.from(oxygenChange).concat(maybeDamage).concat(maybeRemoveEffect)
+})
+
+const checkDeath = stateReader.map(({ getStat, getEffect }) => {
+    const HP = getStat(Status.HP);
+    const Death = getEffect(Effects.Death)
+    return Maybe.from(!HP && !Death)
+                .map(() => [
+                    triggerEffect(Effects.Death),
+                    addFixedLine(i18n.t("location:death"))
+                ])
+})
+
+const checkAutoBreathUnlock = stateReader.map(({ getFlag, getCounter }) => {
+    const unlocked = getFlag(Flags.AutoBreatheUnlocked);
+    return Maybe.from(!unlocked)
+        .chain(() => {
+            const breaths = getCounter(Counters.Breaths);
+            const action = triggerFlag(Flags.AutoBreatheUnlocked)
+            const msgAction = addFixedLine(i18n.t("location:startingPoint.autoBreatheOn"))
+            return Maybe.fromPredicate(() => breaths >= 3, [action, msgAction])
+        })
+})
+
+const checkTravelUnlock = stateReader.map(({ getCounter, getFlag }) => {
+    const breaths = getCounter(Counters.Breaths);
+    const unlocked = getFlag(Flags.TravelUnlocked)
+    return Maybe.from(!unlocked && breaths >= 5)
+                .chain(() => maybeDo(0,10,7))
+                .map(() => [
+                    triggerFlag(Flags.TravelUnlocked),
+                    addFixedLine(i18n.t("location:startingPoint.chooseDestination"))
+                ])
+})
+
+const checkCityEvents = stateReader.map(({ getLocation, anyFlags }) => {
+    const isInCity = getLocation() === Locations.City
+    const isCityEventActive = anyFlags(
+        Flags.Hunger,
+        Flags.SuspiciousVendor,
+        Flags.Suitcase
+    )
+
+    const possibleEvents = [
+        [CityEvents.Hunger, [
+            triggerFlag(Flags.Hunger),
+            triggerEffect(Effects.Hunger),
+        ]],
+        [CityEvents.Suitcase, [ triggerFlag(Flags.Suitcase) ]],
+        [CityEvents.SuspiciousVendor, [ triggerFlag(Flags.SuspiciousVendor) ]]
+    ]
+
+    const getRandomCityEvent = () => getRandomInteger(0,3)
+        .map(i => prop(i,possibleEvents))
+        .run()
+
+    return Maybe.from(isInCity && !isCityEventActive)
+        .chain(() => maybeDo(0,50,25))
+        .map(getRandomCityEvent)
+        .map(([ evt, acts ]) => [ ...acts, addFixedLine(i18n.t(`location:city.randomEvents.${evt}.find`))])
+})
+
+const checkCooldowns = stateReader.map(({ getCooldowns }) => {
+    return Maybe.fromArray(getCooldowns().map(skill => reduceCooldown(skill.id)))
+})
+
+const calculateActions = Reader.do(function*(){
+    const oxygen       = yield checkOxygen;
+    const death        = yield checkDeath;
+    const autoBreath   = yield checkAutoBreathUnlock;
+    const travelUnlock = yield checkTravelUnlock;
+    const cityEvents   = yield checkCityEvents;
+    const cooldowns    = yield checkCooldowns;
+
+    const maybeActions = [
+        oxygen, death, autoBreath,
+        travelUnlock, cityEvents, cooldowns
+    ];
+
+    return Reader.pure(Maybe.accumulate(maybeActions).get());
+})
+
+export default calculateActions;

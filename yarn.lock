@@ -1086,13 +1086,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@juan-utils/ramda-structures@^2.13.1":
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/@juan-utils/ramda-structures/-/ramda-structures-2.13.1.tgz#c66e0cdeeafa6bf9c81f96cc670904accf606ce8"
-  integrity sha512-VAjp5Emh/2qoVNpagbWjDPuvi+OyKNvCoSa2PJrHkMy3K6r9Oym+lnDbrnN6gN2wScpPeAz7tAb6eCtRjQS+Ng==
-  dependencies:
-    ramda "0.27.0"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -4610,6 +4603,11 @@ get-value@^2.0.3, get-value@^2.0.6:
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
 
+getclassname@latest:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/getclassname/-/getclassname-1.0.9.tgz#13732b50d7bac774c526863d9a03622437751c04"
+  integrity sha512-m7N+s2NjNMKO/77TY8OG7/AUj8J7HVlMEeqsO3o3LHorm//fwP2tn+wRimxItEIEdWElDrCBCT655e8Wy5u7Jw==
+
 getpass@^0.1.1:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
@@ -5648,6 +5646,13 @@ istanbul-reports@^2.2.6:
   integrity sha512-uu1F/L1o5Y6LzPVSVZXNOoD/KXpJue9aeLRd0sM9uMXfZvzomB0WxVamWb5ue8kA2vVWEmW7EG+A5n3f1kqHKg==
   dependencies:
     html-escaper "^2.0.0"
+
+jazzi@1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/jazzi/-/jazzi-1.2.4.tgz#6faa96bd9417753c27a144056cd1d46be44981e9"
+  integrity sha512-Buwb1uuUIOI0lhQy1IFu1H5AdkBgttjalto40o3/vFiZFsRYKcXJUtPV8WjhVLm6+JE6zQg6dDznYx8lmnRPbg==
+  dependencies:
+    ramda "0.27.0"
 
 jest-changed-files@^24.9.0:
   version "24.9.0"

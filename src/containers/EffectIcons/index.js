@@ -1,5 +1,5 @@
 import React from 'react'
-import { getClassName } from 'core/utils/css-class'
+import getClassName from "getclassname"
 import EffectIcon from 'components/EffectIcon'
 import { useStatusEffects } from 'core/hooks/state'
 import { toPairs, nth, head } from 'ramda'

@@ -1,24 +1,26 @@
 import React, { Suspense , useEffect } from 'react';
-import { compose } from 'ramda';
+import { compose, prop } from 'ramda';
 import CharacterView from 'containers/CharacterView';
 import SidebarView from 'containers/SidebarView';
 import ActionLogView from 'containers/ActionLogView';
-import { getClassName } from "core/utils/css-class"
-import { useDispatch } from 'react-redux';
+import getClassName from "getclassname"
+import { useDispatch, useSelector } from 'react-redux';
 import { loadState } from 'redux/load';
-import { startTimer, stopTimer } from 'redux/timer';
+import { startTimer, stopTimer, tick } from 'redux/timer';
 import { resetState } from 'redux/reset';
 import Spinner from 'components/Spinner';
 import Monitor from 'containers/Monitor';
-import "App.scss"
 import Storage from 'core/middleware/storage';
+import Session from 'core/middleware/session';
+import SessionMonitor from 'containers/SessionMonitor';
+import "App.scss"
 
 function App() {
+  const isMain = useSelector(prop("main"));
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(loadState())
-    dispatch(startTimer())
   },[dispatch])
 
   const base = getClassName({
@@ -34,23 +36,30 @@ function App() {
   console.groupEnd()
   window["startTimer"] = compose( dispatch, startTimer );
   window["stopTimer"] = compose( dispatch, stopTimer );
+  window["tick"] = compose( dispatch, tick)
   window["reset"] = compose( dispatch, resetState );
-  window["hardReset"] = () => Storage.delete();
+  window["hardReset"] = () => {
+    dispatch(stopTimer())
+    Storage.delete();
+    Session().clean();
+  }
 
   return (
     <div className={base}>
-      <Suspense fallback={<Spinner />}>
-        <Monitor />
-        <main className={mainContainer}>
-          <CharacterView />
-        </main>
-        <div className={sidebarContainer}>
-          <SidebarView />
-        </div>
-        <div className={logContainer}>
-          <ActionLogView />
-        </div>
-      </Suspense>
+      <SessionMonitor main={isMain}>
+        <Suspense fallback={<Spinner />}>
+          <Monitor />
+          <main className={mainContainer}>
+            <CharacterView />
+          </main>
+          <div className={sidebarContainer}>
+            <SidebarView />
+          </div>
+          <div className={logContainer}>
+            <ActionLogView />
+          </div>
+        </Suspense>
+      </SessionMonitor>
     </div>
   );
 }

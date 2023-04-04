@@ -1,18 +1,25 @@
-import { __, is, ifElse, apply, identity, pathOr, curryN, complement, propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, isNil, path } from 'ramda'
+import { IO, Maybe } from 'jazzi';
+import { 
+    __, is, ifElse, apply, identity, pathOr, curryN, complement, 
+    propEq, find, evolve, when, propSatisfies, assoc, not, add, useWith, 
+    isNil, path 
+} from 'ramda'
 import { compose } from 'redux';
 
 /**
- * @description if the value given is a function, applies it with "data" as arguments and returns the result. Otherwise, it is equal to R.identity
+ * @description if the value given is a function, applies it with "data" as arguments and returns the result. 
+ * Otherwise, it is equal to R.identity
  * @param {any} data arguments for apply
  */
 export const extractWith = (data) => (value) => ifElse(
     is(Function), 
-    apply(__,data), 
+    (fn) => apply(fn,data), 
     identity
 )(value)
 
 /**
- * @description if the value given is a function, applies it with empty arguments and returns the result. Otherwise, is equal to R.identity
+ * @description if the value given is a function, applies it with empty arguments and returns the result. 
+ * Otherwise, is equal to R.identity
  * @param {any} value value to be extracted
  */
 export const extract = (value) => extractWith([])(value)
@@ -82,3 +89,23 @@ export const addToNumericProp = useWith(
 
 export const transformBooleanProp = defineAndTransformProp(false);
 export const triggerBooleanProp = defineAndTransformProp(false,__,not);
+
+/**
+ * Returns a random integer between min (inclusive) and max (exclusive)
+ * @param {number} min 
+ * @param {number} max 
+ */
+export const randomInteger = (min,max) => Math.floor(Math.random() * (max - min) ) + min;
+
+/**
+ * Returns IO of a random integer between min (inclusive) and max (exclusive)
+ * @param {number} a 
+ * @param {number} b 
+ */
+export const getRandomInteger = (a,b) => IO.of(() => randomInteger(a,b))
+
+/**
+ * Return Just if args are equal. None otherwise. Curryed.
+ * @param {any} x 
+ */
+export const maybeEquals = x => y => Maybe.from(x === y)

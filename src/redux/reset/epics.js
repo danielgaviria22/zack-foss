@@ -8,6 +8,7 @@ import { fromActions } from "core/utils/redux-utils";
 import { resetLog } from "redux/actionLog";
 import { resetCounters } from "redux/counters";
 import { RESET } from ".";
+import { resetLocation } from "redux/location";
 
 export const resetEpic = action$ => action$.pipe(
     ofType(RESET),
@@ -18,6 +19,7 @@ export const resetEpic = action$ => action$.pipe(
         resetEffects,
         resetLog,
         resetCounters,
+        resetLocation,
         emptyInventory,
         triggerSave
     ))

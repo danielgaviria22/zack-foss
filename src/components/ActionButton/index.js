@@ -1,27 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 import getClassName from "getclassname"
 import { identity } from 'ramda';
+import { useCooldown } from 'core/hooks/state';
+import { useDispatch } from 'react-redux';
+import { setCooldown } from 'redux/cooldowns';
 import "./style.scss"
 
-const Button = (props) => {
+const ActionButton = (props) => {
     const { 
         children, 
         disabled, 
         shy,
         fluid,
+        action,
         cooldown=5,
-        onClick=identity, 
-        onAnimationEnd=identity,
+        onClick=identity,
     } = props;
 
-    const [ loading, setLoading ] = useState(false);
+    const dispatch = useDispatch()
+    const { amount, loading, max } = useCooldown(action)
 
     const baseClass = getClassName({
-        "button": true,
-        "button--loading": loading,
-        "button--disabled": disabled || loading,
-        "button--shy": shy,
-        "button--fluid": fluid,
+        base: "action-button",
+        "&--loading": loading,
+        "&--disabled": disabled || loading,
+        "&--shy": shy,
+        "&--fluid": fluid,
     })
 
     const loadingBlockClass = getClassName({
@@ -30,14 +34,13 @@ const Button = (props) => {
     })
 
     const handleClick = () => {
-        !disabled && setLoading(true)
+        !disabled && dispatch(setCooldown(action,cooldown))
         onClick()
     }
 
-    const handleAnimationEnd = () => {
-        setLoading(false);
-        onAnimationEnd()
-    }
+    const percentage = ((amount) * 100 / max);
+
+    const s = loading ? { width: `${percentage}%` } : {}
 
     return (
         <button 
@@ -48,12 +51,11 @@ const Button = (props) => {
             {children}
             <div 
                 className={loadingBlockClass} 
-                style={{ animationDuration: `${cooldown}s`}}
-                onAnimationEnd={handleAnimationEnd}
+                style={s}
             />
         </button>
     )
 }
 
 
-export default Button
+export default ActionButton

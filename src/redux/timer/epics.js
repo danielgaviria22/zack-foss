@@ -1,10 +1,9 @@
 import { ofType } from "redux-observable";
-import { juxt } from "ramda"
 import { map, mergeMap, withLatestFrom, filter } from 'rxjs/operators'
 import Timer from "core/structures/timer";
 import { fromActionsEager } from 'core/utils/redux-utils';
 import { START_TIMER, STOP_TIMER, TICK, tick } from ".";
-import { checkOxygen, checkAutoBreathUnlock } from './timerEffects'
+import processTick from './timerEffects'
 
 export const timerEpic = (action$) => action$.pipe(
     ofType( START_TIMER, STOP_TIMER ),
@@ -20,39 +19,10 @@ export const timerEpic = (action$) => action$.pipe(
     filter(() => false) // Do nothing
 )
 
-// Array of functions that have the following signature:
-// (state) => Maybe<action | action[]>
-// These functions should always return a Maybe of action array.
-// Should return Maybe.None when no changes are required
-/**
- * @template T
- * @typedef {import('@juan-utils/ramda-structures').Maybe<T>} Maybe
- */
-/** 
- * @typedef {{ type: string, payload?: any}} Action
- * @typedef {(state: any) => Maybe<Action | Action[]>} ActionGenerator
- * @constant processTick
- * @description Array of functions that return Maybe<Action | Action[]>
- * @type {ActionGenerator[]}
- */
-const processTick = [
-    checkOxygen, checkAutoBreathUnlock
-]
-
-/**
- * @param {Maybe<Action | Action[]>} maybeAction
- */
-const getActions = maybeAction => maybeAction.onNone(() => [])
-/**
- * @param {Maybe<Action | Action[]>[]} arr
- * @returns {Action[]}
- */
-const unwrapActions = arr => arr.flatMap(getActions)
-
 export const tickEpic = (action$,state$) => action$.pipe(
     ofType(TICK),
     withLatestFrom(state$),
-    map(([,state]) => unwrapActions(juxt(processTick)(state))),
+    map(([,state]) => processTick.run(state)),
     filter(actions => actions.length),
     mergeMap(actions => {
         return fromActionsEager(

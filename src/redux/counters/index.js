@@ -1,6 +1,6 @@
 import { createReducer, nAryActionCreator, loadState, resetState, unaryActionCreator, nullaryActionCreator } from "core/utils/redux-utils"
 import { assoc, gte, __ } from "ramda";
-import { Result } from "@juan-utils/ramda-structures";
+import { Result } from "jazzi";
 
 export const SET_COUNTER = "zack-foss/set-counter"
 export const INC_COUNTER = "zack-foss/inc-counter"
@@ -12,7 +12,7 @@ const parseAction = (callback) => (state,action) => {
     const { payload: { name, amount } } = action;
     return Result.fromPredicate(gte(__,0), amount)
         .map(() => callback(name,amount,state))
-        .onError((amount) => {
+        .onErr((amount) => {
             const typeName = action.type.split("/")[1]
             console.warn(`Invariant violation: "${typeName}" actions only accept positive numbers but received "${amount}" instead. Mutation of "${name}" counter avoided`)
             return state

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
-import { Maybe } from '@juan-utils/ramda-structures'
-import { getClassName } from 'core/utils/css-class'
+import { Maybe } from 'jazzi'
+import getClassName from "getclassname"
 import "./style.scss"
 
 const ActionItem = ({ data, children=[] }) => {

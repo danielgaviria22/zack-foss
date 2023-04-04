@@ -1,4 +1,4 @@
-.button{
+.action-button{
     font-family: 'Roboto', sans-serif;
     background-color: skyblue;
     color: black;
@@ -12,11 +12,6 @@
     position: relative;
     cursor: pointer;
 
-    @keyframes loading {
-        0%   { width: 100% }
-        100% { width: 0% }
-    }
-
     & .loading-block {
         position: absolute;
         top: 0;
@@ -24,16 +19,8 @@
         opacity: 0;
         background-color: gray;
         height: 100%;
-        width: 0%;
-
-        animation-name: none;
-        animation-duration: 5s;
-        animation-timing-function: linear;
-
-        &--loading {
-            animation-name: loading;
-            animation-duration: 5s;
-        }
+        width: 100%;
+        transition: all 1s linear;
     }
 
 
